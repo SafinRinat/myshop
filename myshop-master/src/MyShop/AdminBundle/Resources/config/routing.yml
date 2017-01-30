@@ -1,0 +1,37 @@
+my_shop_admin.index:
+    path:   /
+    defaults: { _controller: MyShopAdminBundle:Default:index }
+
+my_shop_admin.product_add:
+    path:   /product/add
+    defaults: { _controller: MyShopAdminBundle:Product:add }
+
+my_shop_admin.product_list:
+    path:   /product/list
+    defaults: { _controller: MyShopAdminBundle:Product:list }
+
+my_shop_admin.product_list_by_category:
+    path:   /category/{id_category}/product/list
+    defaults: { _controller: MyShopAdminBundle:Product:listByCategory }
+    requirements:
+        id_category: \d+
+
+my_shop.admin.product_delete:
+    path:   /product/{id}/delete
+    defaults: { _controller: MyShopAdminBundle:Product:delete }
+    requirements:
+        id: \d+
+
+my_shop_admin.product_edit:
+    path:   /product/{id}/edit
+    defaults: { _controller: MyShopAdminBundle:Product:edit }
+    requirements:
+        id: \d+
+
+my_shop_admin.category_add:
+    path:   /category/add
+    defaults: { _controller: MyShopAdminBundle:Category:add }
+
+my_shop_admin.category_list:
+    path:   /category/list
+    defaults: { _controller: MyShopAdminBundle:Category:list }

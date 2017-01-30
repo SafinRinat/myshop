@@ -1,0 +1,3 @@
+services:
+    myshop.news_manager:
+        class: MyShop\DefaultBundle\Manager\NewsManager

@@ -1,0 +1,22 @@
+<html>
+<head>
+    <link rel="stylesheet" href="{{ asset("bundles/myshopdefault/main.css") }}" />
+</head>
+<body>
+    <table border="1" style="width: 100%">
+        <tr>
+            <td valign="top" style="width: 400px">
+                <ul>
+                    <li><a href="{{ path("MyShopDefaultBundle:Default:index") }}">Main page</a></li>
+                    <li><a href="{{ path("MyShopDefaultBundle:Default:showProduct", {id:1}) }}">Product details</a></li>
+                    <li><a href="{{ path("MyShopDefaultBundle:Default:showProductList") }}">Product list</a></li>
+                </ul>
+            </td>
+            <td valign="top">
+                {% block body %}
+                {% endblock %}
+            </td>
+        </tr>
+    </table>
+</body>
+</html>

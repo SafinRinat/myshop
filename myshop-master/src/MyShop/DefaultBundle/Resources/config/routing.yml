@@ -1,0 +1,18 @@
+myshop.main_page:
+    path:     /
+    defaults: { _controller: MyShopDefaultBundle:Default:index }
+
+myshop.product_info:
+    path: /product/{id}
+    defaults: { _controller: MyShopDefaultBundle:Default:showProduct }
+    methods: [GET]
+    requirements:
+        id: \d+
+
+myshop.product_list:
+    path: /product/list
+    defaults: { _controller: MyShopDefaultBundle:Default:showProductList }
+
+myshop.product_create:
+    path: /product/create
+    defaults: { _controller: MyShopDefaultBundle:Default:createSomeProduct }

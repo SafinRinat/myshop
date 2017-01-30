@@ -1,0 +1,10 @@
+admin:
+    resource: "@AdminBundle/Controller/"
+    type:     annotation
+    prefix:   /
+
+default:
+    resource: "@DefaultBundle/Controller/"
+    type:     annotation
+    prefix:   /
+

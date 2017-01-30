@@ -1,0 +1,6 @@
+<a href="{{ path("my_shop_admin.category_add") }}">Добавить категорию</a>
+<ul>
+{% for cat in categoryList %}
+    <li><a href="{{ path("my_shop_admin.product_list_by_category", {id_category:cat.id}) }}">{{ cat.name }}</a></li>
+{% endfor %}
+</ul>
