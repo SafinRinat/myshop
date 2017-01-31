@@ -18,7 +18,7 @@ class CategoryType extends AbstractType
             "label" => "Название категории"
         ])        ;
     }
-    
+
     /**
      * {@inheritdoc}
      */

@@ -34,7 +34,7 @@ class ProductType extends AbstractType
             ])
         ;
     }
-    
+
     /**
      * {@inheritdoc}
      */

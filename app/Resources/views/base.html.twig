@@ -2,12 +2,18 @@
 <html>
     <head>
         <meta charset="UTF-8" />
-        <title>{% block title %}Welcome!{% endblock %}</title>
-        {% block stylesheets %}{% endblock %}
+        <title>{% block title %}Chopper.com.ua - ШОПЕР{% endblock %}</title>
         <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
+        <link rel="stylesheet" type="text/css" href="{{ asset('bundles/dist/bootstrap.min.css') }}" />
+        {% block stylesheets %}{% endblock %}
     </head>
     <body>
-        {% block body %}{% endblock %}
+        {% block body %}
+
+        {% endblock %}
+
+        <script type="text/javascript" src="{{ asset('bundles/js/bootstrap.min.js') }}"></script>
+        <script type="text/javascript" src="{{ asset('bundles/js/jquery.min.js') }}"></script>
         {% block javascripts %}{% endblock %}
     </body>
 </html>

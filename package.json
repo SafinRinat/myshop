@@ -1,0 +1,22 @@
+{
+  "name": "myshop",
+  "version": "1.0.0",
+  "description": "school hillel e-comerce shop",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SafinRinat/myshop.git"
+  },
+  "author": "Rinat Safin",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/SafinRinat/myshop/issues"
+  },
+  "homepage": "https://github.com/SafinRinat/myshop#readme"
+}

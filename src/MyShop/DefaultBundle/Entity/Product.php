@@ -47,14 +47,14 @@ class Product
      *
      * @ORM\Column(name="short_description", type="text")
      */
-    private $shortDescription;
+    private $shortDescription = '';
 
     /**
      * @var string
      *
      * @ORM\Column(name="description", type="text")
      */
-    private $description;
+    private $description = '';
 
     /**
      * @var \DateTime
