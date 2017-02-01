@@ -18,4 +18,24 @@ class DefaultController extends Controller
         return $this->render('DefaultBundle:Default:index.html.twig');
     }
 
+    /**
+     * @Route("create/some/")
+     */
+    public function createSomeProductAction()
+    {
+        $product = new Product();
+        $product->setModel("iPhone");
+        $product->setPrice(200);
+        $product->setShortDescription("Great mobile phone");
+
+        $manager = $this->getDoctrine()->getManager();
+
+        $manager->persist($product);
+        $manager->flush();
+
+        $response = new Response();
+
+        $response->setContent($product->getId());
+    }
+
 }
