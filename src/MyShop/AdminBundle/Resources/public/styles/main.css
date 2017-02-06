@@ -1,0 +1,13 @@
+.main_block
+{
+    width: 100%;
+}
+
+body {
+    background: #e3e3e3;
+}
+
+#app {
+    margin: 0 auto;
+    padding: 50px;
+}

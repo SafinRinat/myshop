@@ -1,0 +1,9 @@
+.main_block
+{
+    width: 100%;
+}
+
+#app {
+    margin: 0 auto;
+    padding: 50px;
+}

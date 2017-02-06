@@ -1,0 +1,27 @@
+{% extends "@MyShopDefault/layout.html.twig" %}
+
+{% block body %}
+    <h2>Product list</h2>
+    <ul>
+        {% for product in productList %}
+            <li>
+                <div>Дата добавления товара: {{ product.getDateCreatedAt().format("d.m.Y H:i:s") }}</div>
+                <div>
+                    Название товара:  <b>{{ product.getModel() }}</b>
+                </div>
+                <div>
+                    Цена: <b>{{ product.getPrice() }}</b>
+                </div>
+
+                <div>
+                    Описание товара: {{ product.getDescription() }}
+                </div>
+
+                <a href="{{ path("myshop_default_default_showproduct", {id:product.getId()}) }}">Show product details</a>
+            </li>
+        {% else %}
+            No products!
+        {% endfor %}
+    </ul>
+
+{% endblock %}

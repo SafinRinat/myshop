@@ -1,0 +1,8 @@
+services:
+  myshop_admin.check_img:
+      class:  MyShop\AdminBundle\MyShopAdminBundle\ImageUtils\CheckImg
+      arguments:
+              - "%%upload_image_type_list%%"
+
+  myshop_admin.image_name:
+      class:  MyShop\AdminBundle\MyShopAdminBundle\ImageUtis\ImageNameGenerator

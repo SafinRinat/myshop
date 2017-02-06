@@ -1,0 +1,29 @@
+# This file is a "template" of what your parameters.yml file should look like
+# Set parameters here that may be different on each deployment target of the app, e.g. development, staging, production.
+# http://symfony.com/doc/current/best_practices/configuration.html#infrastructure-related-configuration
+parameters:
+    database_host: 127.0.0.1
+    database_port: null
+    database_name: school_hillel
+    database_user: root
+    database_password: null
+    mailer_transport: smtp
+    mailer_host: 127.0.0.1
+    mailer_user: null
+    mailer_password: null
+    secret: c41f3c4a328165f8ae237801553e6777d9f80b9e
+    upload_image_type_list:
+        -
+            - jpeg
+            - image/jpeg
+        -
+            - jpg
+            - image/jpg
+        -
+            - gif
+            - image/gif
+        -
+            - png
+            - image/png
+            - tiff
+            - image/tiff

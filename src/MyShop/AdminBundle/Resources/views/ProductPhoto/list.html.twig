@@ -1,0 +1,21 @@
+{% extends "@MyShopAdmin/layout.html.twig" %}
+
+{% block body %}
+    <h3>Фотографии товара {{ product.model }}</h3>
+
+    <a href="{{ path("myshop_admin_productphoto_add", {idProduct:product.id}) }}">Добавить фото</a>
+    <table>
+    {% for photo in product.getPhotos() %}
+        <tr>
+            <td>{{ photo.getTitle() }}</td>
+            <td>
+                <img src="/photos/{{ photo.getFileName() }}" />
+            </td>
+            <td>
+                <a href="#">Редактирование</a>
+                <a href="#">Удалить</a>
+            </td>
+        </tr>
+    {% endfor %}
+    </table>
+{% endblock %}

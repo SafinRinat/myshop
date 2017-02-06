@@ -1,0 +1,9 @@
+{% extends "@MyShopAdmin/layout.html.twig" %}
+
+{% block body %}
+    <h3>Редактирование Категории:</h3>
+    <form method="post" action="{{ path('myshop_admin_category_edit') }}">
+        {{ form_widget(form) }}
+        <input type="submit" />
+    </form>
+{% endblock %}

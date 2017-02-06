@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="ru">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <link rel="stylesheet" type="text/css" href="{{ asset('bundles/myshopdefault/dist/bootstrap.min.css') }}" />
+        <link rel="stylesheet" type="text/css" href="{{ asset("bundles/myshopdefault/main.css") }}" />
+        <title>{% block title %}Панель администратора!{% endblock %}</title>
+        {% block stylesheets %}{% endblock %}
+        <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
+    </head>
+    <body>
+        <div>
+            <div>
+                Домашнее задание: 25.01.17
+            </div>
+            <ul>
+                <li style="text-decoration: line-through;">
+                    1. Создать Entity согласно вашим ТЗ (Product, Category, News, и.т.д. кто какие
+                    придумал себе в ТЗ).
+                </li>
+                <li  style="text-decoration: line-through;">
+                    2. Настроить соединение с базой данных
+                </li>
+                <li  style="text-decoration: line-through;">
+                    3. Создать базу данных.
+                </li>
+                <li  style="text-decoration: line-through;">
+                    4. выгрузить на GitHub в репозиторий
+                </li>
+                <li  style="text-decoration: line-through;">
+                    5. Ссылку на репозиторий кинуть мне в скайп или на емеил
+                </li>
+            </ul>
+            <div>
+                Домашнее задание: 01.02.17
+            </div>
+            <ul>
+                <li  style="text-decoration: line-through;">
+                    1. Создать Entity фото для вашего товара
+                </li>
+                <li>
+                    2. настроить связи между товаром и фото товара
+                </li>
+                <li>
+                    3. Сделать загрузку фотографий и функционал добавления, редактирования и удаления.
+                    Редактирование имеется ввиду, редактирование полей которые сопутствуют сущности фото товара
+                    (если кто-то сможет сделать редактирование самой фото, то есть, при редактировании если пользователь
+                    загружает новую фото, то старая фотка удоляется - будет очень круто и +1 к карме  ).
+                </li>
+            </ul>
+            <div>
+                Домашнее задание: 05.02.17
+            </div>
+            <ul>
+                <li>
+                    1. сделать свой сервис для проверки расширения и mime type картинки (расширения и mime type должны
+                    задаваться из конфига)
+                </li>
+                <li>
+                    2. сделать ресайз картинки (пороговые значения ширины и высоты картинки должны задаваться из конфига)
+                </li>
+                <li>
+                    3. сделать свою категорию в виде дерева
+                </li>
+            </ul>
+        </div>
+        <div id="app">
+            <table border="1" style="width: 100%">
+                <tr>
+                    <td colspan="2"><h3>Admin panel</h3></td>
+                </tr>
+                <tr>
+                    <td valign="top" style="width: 400px">
+                        <ul>
+                            <li><a href="{{ path("myshop_admin_default_index") }}">Главная</a></li>
+                            <li><a href="{{ path("myshop_admin_product_list") }}">Товары</a></li>
+                            <li><a href="{{ path("myshop_admin_product_listbycategory", {id_category:1}) }}">Товары по категориям</a></li>
+                            <li><a href="{{ path("myshop_admin_category_list") }}">Категории товаров</a></li>
+                        </ul>
+                    </td>
+                    <td valign="top">
+                        {% block body %}
+                        {% endblock %}
+                    </td>
+                </tr>
+            </table>
+        </div>
+
+        <script type="text/javascript" src="{{ asset('bundles/myshopdefault/js/dist/jquery.min.js') }}"></script>
+        <script type="text/javascript" src="{{ asset('bundles/myshopdefault/js/dist/bootstrap/bootstrap.min.js') }}"></script>
+        {% block javascripts %}{% endblock %}
+    </body>
+</html>

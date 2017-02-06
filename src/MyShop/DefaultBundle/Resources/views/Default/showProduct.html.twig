@@ -1,0 +1,18 @@
+{% extends "@MyShopDefault/layout.html.twig" %}
+
+{% block body %}
+    <h2>
+        Product: {{ product.id }}
+    </h2>
+    <ul>
+        <li>
+            Модель: {{ product.model }}
+        </li>
+        <li>
+            Цена: {{ product.price }}
+        </li>
+        <li>
+            Описание: {{ product.description }}
+        </li>
+    </ul>
+{% endblock %}

@@ -1,0 +1,10 @@
+my_shop_admin:
+    resource: "@MyShopAdminBundle/Controller/"
+    type:     annotation
+    prefix:   /admin
+
+my_shop_default:
+    resource: "@MyShopDefaultBundle/Controller/"
+    type:     annotation
+    prefix:   /
+
