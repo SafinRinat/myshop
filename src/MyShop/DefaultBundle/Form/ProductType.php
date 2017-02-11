@@ -4,6 +4,7 @@ namespace MyShop\DefaultBundle\Form;
 
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -22,18 +23,22 @@ class ProductType extends AbstractType
             ->add('model', TextType::class, [
                 'label' => 'Модель товара: '
             ])
-            ->add('productCode')
             ->add('price', NumberType::class, [
-                "label" => 'Цена товара: '
-            ])
-            ->add('shortDescription', TextType::class,[
-                'label' => 'Короткое описание: '
-            ])
-            ->add('description', TextType::class,[
-                'label' => 'Подробное описание: '
+                "label" => 'Цена товара'
             ])
             ->add('count', NumberType::class, [
                 'label' => 'Количество товара: '
+            ])
+            ->add('category', EntityType::class, [
+                "class" => "MyShopDefaultBundle:Category",
+                "choice_label" => "name",
+                "label" => "Категория: "
+            ])
+            ->add('shortDescription', TextareaType::class,[
+                'label' => 'Короткое описание: '
+            ])
+            ->add('description', TextareaType::class,[
+                'label' => 'Подробное описание: '
             ])
             ->add('dateStockStart', DateType::class, [
                 'label' => 'Начала акции: '
@@ -41,13 +46,9 @@ class ProductType extends AbstractType
             ->add('dateStockEnd', DateType::class, [
                 'label' => 'Конец акции: '
             ])
-            ->add('stockStatus', TextType::class, [
-                'label' => 'Статус акции: '
-            ])
-            ->add('category', EntityType::class, [
-                "class" => "MyShopDefaultBundle:Category",
-                "choice_label" => "name",
-                "label" => "Категория: "
+            ->add('stockStatus', ChoiceType::class, [
+                'choices' => ['In Stock' => true, 'Out of Stock' => false],
+                'placeholder' => 'Choose an option'
             ]);
     }
 

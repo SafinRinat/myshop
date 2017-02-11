@@ -7,6 +7,6 @@ class ImageNameGenerator
 {
     public function generateName()
     {
-        return rand(100000000, 999999999);
+        return rand(100, 999999999);
     }
 }

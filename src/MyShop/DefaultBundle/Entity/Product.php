@@ -30,13 +30,6 @@ class Product
     private $model;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="product_code", type="integer", nullable=true, unique=true)
-     */
-    private $productCode;
-
-    /**
      * @var float
      *
      * @ORM\Column(name="price", type="float")
@@ -86,9 +79,9 @@ class Product
     private $dateStockEnd;
 
     /**
-     * @var string
+     * @var boolean
      *
-     * @ORM\Column(name="stock_status", type="string", length=64, nullable=true)
+     * @ORM\Column(name="stock_status", type="boolean", length=64, nullable=true)
      */
     private $stockStatus;
 
@@ -163,30 +156,6 @@ class Product
     public function getModel()
     {
         return $this->model;
-    }
-
-    /**
-     * Set productCode
-     *
-     * @param integer $productCode
-     *
-     * @return Product
-     */
-    public function setProductCode($productCode)
-    {
-        $this->productCode = $productCode;
-
-        return $this;
-    }
-
-    /**
-     * Get productCode
-     *
-     * @return int
-     */
-    public function getProductCode()
-    {
-        return $this->productCode;
     }
 
     /**
@@ -360,7 +329,7 @@ class Product
     /**
      * Set stockStatus
      *
-     * @param string $stockStatus
+     * @param boolean $stockStatus
      *
      * @return Product
      */
@@ -374,7 +343,7 @@ class Product
     /**
      * Get stockStatus
      *
-     * @return string
+     * @return boolean
      */
     public function getStockStatus()
     {

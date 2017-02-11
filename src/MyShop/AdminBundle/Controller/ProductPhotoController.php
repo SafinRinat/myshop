@@ -53,6 +53,7 @@ class ProductPhotoController extends Controller
         $photo = new ProductPhoto();
         $form = $this->createForm(ProductPhotoType::class, $photo);
 
+
         if ($request->isMethod("POST"))
         {
             $form->handleRequest($request);
@@ -89,9 +90,11 @@ class ProductPhotoController extends Controller
             $product->flush();
         }
 
+        var_dump($product->getId());
+        die();
         return $this->render("MyShopAdminBundle:ProductPhoto:add.html.twig". [
                 "form" => $form->createView(),
-                "product" => $product
+                "product" => $product->getId()
         ]);
     }
 }

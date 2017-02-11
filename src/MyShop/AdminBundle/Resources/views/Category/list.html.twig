@@ -3,10 +3,12 @@
 {% block body %}
 
 <a href="{{ path("myshop_admin_category_add") }}">Добавить категорию</a>
-<ul>
-{% for cat in categoryList %}
-    <li><a href="{{ path("myshop_admin_product_listbycategory", {id_category:cat.id}) }}">{{ cat.name }}</a></li>
-{% endfor %}
-</ul>
 
+{% if categoryList != null %}
+    <ul>
+        {% for cat in categoryList %}
+            <li><a href="{{ path("myshop_admin_product_listbycategory", {id_category:cat.id}) }}">{{ cat.name }}</a></li>
+        {% endfor %}
+    </ul>
+{% endif %}
 {% endblock %}

@@ -5,12 +5,14 @@
 
 <table border="1">
     <tr>
+        <td>Номер товара</td>
         <td>Модель</td>
         <td>Категория</td>
         <td>Цена</td>
     </tr>
 {% for product in productList %}
     <tr>
+        <td>{{ product.getId() }}</td>
         <td>{{ product.getModel() }}</td>
         <td>{{ product.getCategory().getName() }}</td>
         <td>{{ product.getPrice() }}</td>

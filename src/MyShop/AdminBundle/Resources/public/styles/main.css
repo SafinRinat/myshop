@@ -11,3 +11,7 @@ body {
     margin: 0 auto;
     padding: 50px;
 }
+
+table tr > td {
+    padding: 5px;
+}
