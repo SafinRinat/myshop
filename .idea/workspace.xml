@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="1f8f16b9-b216-45a4-a6a9-615454d413a0" name="Default" comment="" />
+    <list default="true" id="1f8f16b9-b216-45a4-a6a9-615454d413a0" name="Default" comment="Сделал раздел добавлени товаро, категорий, осталась проблема с добавлением фото.">
+      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="" />
+    </list>
     <ignored path=".idea/dataSources.local.xml" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -19,35 +21,6 @@
   </component>
   <component name="FileEditorManager">
     <leaf />
-  </component>
-  <component name="FileTemplateManagerImpl">
-    <option name="RECENT_TEMPLATES">
-      <list>
-        <option value="CSS File" />
-      </list>
-    </option>
-  </component>
-  <component name="FindInProjectRecents">
-    <findStrings>
-      <find>fonts/</find>
-      <find>cout</find>
-      <find>id_category</find>
-      <find>users</find>
-      <find>user</find>
-      <find>usersRepository</find>
-      <find>use Symfony\Component\Form\Extension\Core\Type\TextType;</find>
-      <find>myshop_admin_category_list</find>
-      <find>isMethod</find>
-      <find>Photos</find>
-      <find>\MyShop\DefaultBundle\Entity\Category $parentCategory</find>
-    </findStrings>
-    <replaceStrings>
-      <replace>count</replace>
-      <replace>ShopUsers</replace>
-    </replaceStrings>
-    <dirStrings>
-      <dir>$PROJECT_DIR$</dir>
-    </dirStrings>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -174,22 +147,6 @@
     <property name="js-jscs-nodeInterpreter" value="/usr/local/bin/node" />
     <property name="settings.editor.splitter.proportion" value="0.2" />
   </component>
-  <component name="RecentsManager">
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/src/MyShop/AdminBundle" />
-      <recent name="$PROJECT_DIR$/src/MyShop/DefaultBundle/Resources/public/styles" />
-      <recent name="$PROJECT_DIR$/src/MyShop/AdminBundle/Resources/public" />
-      <recent name="$PROJECT_DIR$/src/MyShop/AdminBundle/Resources/public/styles" />
-      <recent name="$PROJECT_DIR$/web/js/dist/bootstrap" />
-    </key>
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/src/MyShop/AdminBundle/ImageUtils" />
-      <recent name="$PROJECT_DIR$/src/MyShop/DefaultBundle/Resources/public" />
-      <recent name="$PROJECT_DIR$/src/MyShop/AdminBundle/Resources/views" />
-      <recent name="$PROJECT_DIR$/web/js/dist" />
-      <recent name="$PROJECT_DIR$/web/bundles/dist" />
-    </key>
-  </component>
   <component name="RunManager">
     <configuration default="true" type="JavascriptDebugType" factoryName="JavaScript Debug">
       <method />
@@ -261,11 +218,18 @@
       <option name="project" value="LOCAL" />
       <updated>1486844355859</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Сделал раздел добавлени товаро, категорий, осталась проблема с добавлением фото.">
+      <created>1486844366023</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1486844366023</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="50344000" />
+    <option name="totallyTimeSpent" value="50379000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-1" y="23" width="1922" height="1035" extended-state="6" />
@@ -312,9 +276,6 @@
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
     </layout-to-restore>
-  </component>
-  <component name="TypeScriptGeneratedFilesManager">
-    <option name="processedProjectFiles" value="true" />
   </component>
   <component name="Vcs.Log.UiProperties">
     <option name="RECENTLY_FILTERED_USER_GROUPS">
