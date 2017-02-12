@@ -12,6 +12,7 @@ parameters:
     mailer_user: null
     mailer_password: null
     secret: c41f3c4a328165f8ae237801553e6777d9f80b9e
+    image_upload_dir: "%kernel.root_dir%/../web/photos/"
     upload_image_type_list:
         -
             - jpeg

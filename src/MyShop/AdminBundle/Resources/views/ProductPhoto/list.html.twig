@@ -3,17 +3,17 @@
 {% block body %}
     <h3>Фотографии товара {{ product.model }}</h3>
 
-    <a href="{{ path("myshop_admin_productphoto_add", {idProduct:product.id}) }}">Добавить фото</a>
+    <a href="{{ path("myshop_admin_productphoto_addphoto", {id_product:product.id}) }}">Добавить фото</a>
     <table>
     {% for photo in product.getPhotos() %}
         <tr>
             <td>{{ photo.getTitle() }}</td>
             <td>
-                <img src="/photos/{{ photo.getFileName() }}" />
+                <img src="/photos/{{ photo.getSmallFileName() }}" />
             </td>
             <td>
-                <a href="#">Редактирование</a>
-                <a href="#">Удалить</a>
+                ( <a href="{{ path("myshop_admin_productphoto_editphoto", { id_product:product.getId(), id_photo:photo.getId() }) }}">Редактирование</a> /
+                <a href="{{ path("myshop_admin_productphoto_deletephoto", { id_product:product.getId(), id_photo:photo.getId()}) }}">Удалить</a> )
             </td>
         </tr>
     {% endfor %}

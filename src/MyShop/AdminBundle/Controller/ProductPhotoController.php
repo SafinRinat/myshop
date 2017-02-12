@@ -15,17 +15,18 @@ use Symfony\Component\HttpFoundation\Request;
 class ProductPhotoController extends Controller
 {
     /**
-     * @Route("/product/{idProduct}/photos/", requirements={"idProduct": "\d+"})
+     * @Route("/photos/product/{id_product}/", requirements={"id_product": "\d+"})
      * @Method({"GET", "POST"})
-     * @param $idProduct
+     * @param $id_product
      * @return array
+     *
      */
-    public function listAction($idProduct)
+    public function listAction($id_product)
     {
         $product = $this->getDoctrine()
             ->getManager()
             ->getRepository("MyShopDefaultBundle:Product")
-            ->find($idProduct);
+            ->find($id_product);
 
         return $this->render("MyShopAdminBundle:ProductPhoto:list.html.twig", [
                 "product" => $product
@@ -33,19 +34,17 @@ class ProductPhotoController extends Controller
     }
 
     /**
-     * @Route("/product/{idProduct}/photo/add/", requirements={"idProduct","\d+"})
+     * @Route("/photo/add/product/{id_product}/", requirements={"id_product","\d+"})
      * @Method({"GET", "POST"})
      * @param Request $request
-     * @param $idProduct
+     * @param $id_product
      * @return \Symfony\Component\HttpFoundation\Response|\Symfony\Component\HttpKernel\Exception\NotFoundHttpException
+     *
      */
-    public function addAction(Request $request, $idProduct)
+    public function addPhotoAction(Request $request, $id_product)
     {
-        $product = $this->getDoctrine()
-            ->getManager()
-            ->getRepository("MyShopDefaultBundle:Product")
-            ->find($idProduct);
-
+        $manager = $this->getDoctrine()->getManager();
+        $product = $manager->getRepository("MyShopDefaultBundle:Product")->find($id_product);
         if ($product == null) {
             return $this->createNotFoundException("Product not found!");
         }
@@ -64,37 +63,111 @@ class ProductPhotoController extends Controller
             $photoFile = $filesAr["photoFile"];
 
             $checkImgService = $this->get("myshop_admin.check_img");
+
             try {
                 $checkImgService->check($photoFile);
             } catch (\InvalidArgumentException $ex) {
                 die("Image type error!");
             }
 
-            $imageNameGenerator = $this->get("myshop_admin.image_name_generator");
+            $result = $this->get("myshop_admin.image_uploader")->uploadImage($photoFile, $id_product);
 
-            $photoFileName = $product->getId() . $imageNameGenerator->generateName() . "." . $photoFile->getClientOriginalExtension();
-            $photoDirPath = $this->get("kernel")->getRootDir() . "/../web/photos/";
-
-            $photoFile->move($photoDirPath, $photoFileName);
-
-            $img = new ImageResize($photoDirPath . $photoFileName);
-            $img->resizeToBestFit(250, 200);
-            $smallPhotoName = "small_" . $photoFileName;
-            $img->save($photoDirPath . $smallPhotoName);
-
-            $photo->setSmallFileName($smallPhotoName);
-            $photo->setFileName($photoFileName);
+            $photo->setSmallFileName($result->getSmallFileName());
+            $photo->setFileName($result->getBigFileName());
             $photo->setProduct($product);
 
-            $product->persist($photo);
-            $product->flush();
+            $manager->persist($photo);
+            $manager->flush();
+
+            return $this->redirectToRoute("myshop_admin_productphoto_list", ['id_product' => $id_product]);
         }
 
-        var_dump($product->getId());
-        die();
-        return $this->render("MyShopAdminBundle:ProductPhoto:add.html.twig". [
+        return $this->render("MyShopAdminBundle:ProductPhoto:add.html.twig", [
                 "form" => $form->createView(),
-                "product" => $product->getId()
+                "product" => $product
+        ]);
+    }
+
+    /**
+     * @Route("/product/{id_product}/photo/delete/{id_photo}", requirements={"id_product","\d+", "id_photo","\d+"})
+     * @param $id_photo
+     *
+     */
+    public function deletePhotoAction($id_product, $id_photo) {
+
+        $product = $this->getDoctrine()->getRepository("MyShopDefaultBundle:Product")->find($id_product);
+
+        $productPhoto = $this
+            ->getDoctrine()
+            ->getRepository("MyShopDefaultBundle:ProductPhoto")
+            ->find($id_photo);
+
+        //TODO: make method on service delet foto on upload folder
+        //small_file_name -> photo
+        $getSmallFileName = $productPhoto->getSmallFileName();
+        //file_name -> photo
+        $getFileName = $productPhoto->getFileName();
+
+        $manager = $this->getDoctrine()->getManager();
+
+        $manager->remove($productPhoto);
+        $manager->flush();
+
+        return $this->redirectToRoute("myshop_admin_productphoto_list", ['id_product' => $id_product]);
+    }
+
+    /**
+     * @Route("/product/{id_product}/photo/edit/{id_photo}/", requirements={"id_product": "\d+", "id_photo","\d+"})
+     *
+     */
+    public function editPhotoAction(Request $request, $id_product, $id_photo)
+    {
+
+        $product = $this->getDoctrine()->getRepository("MyShopDefaultBundle:Product")->find($id_product);
+
+        if ($product == null) {
+            return $this->createNotFoundException("Product not found!");
+        }
+
+        $photo = $this->getDoctrine()->getRepository("MyShopDefaultBundle:ProductPhoto")->find($id_photo);
+
+        $form = $this->createForm(ProductPhotoType::class, $photo);
+
+        if ($request->isMethod("POST"))
+        {
+            $form->handleRequest($request);
+
+            if ($form->isSubmitted())
+            {
+                $filesAr = $request->files->get("myshop_defaultbundle_productphoto");
+                /** @var UploadedFile $photoFile */
+                $photoFile = $filesAr["photoFile"];
+
+                $checkImgService = $this->get("myshop_admin.check_img");
+
+                try {
+                    $checkImgService->check($photoFile);
+                } catch (\InvalidArgumentException $ex) {
+                    die("Image type error!");
+                }
+                $result = $this->get("myshop_admin.image_uploader")->uploadImage($photoFile, $id_product);
+
+                $photo->setSmallFileName($result->getSmallFileName());
+                $photo->setFileName($result->getBigFileName());
+                $photo->setProduct($product);
+
+                $manager = $this->getDoctrine()->getManager();
+                $manager->persist($photo);
+                $manager->flush();
+
+                return $this->redirectToRoute("myshop_admin_productphoto_list", ['id_product' => $id_product]);
+            }
+        }
+
+        return $this->render("MyShopAdminBundle:ProductPhoto:edit.html.twig", [
+            "form" => $form->createView(),
+            "photo" => $photo,
+            'product'=> $product
         ]);
     }
 }

@@ -7,7 +7,11 @@
 {% if categoryList != null %}
     <ul>
         {% for cat in categoryList %}
-            <li><a href="{{ path("myshop_admin_product_listbycategory", {id_category:cat.id}) }}">{{ cat.name }}</a></li>
+            <li>
+                <a href="{{ path("myshop_admin_product_listbycategory", {id_category:cat.id}) }}">{{ cat.name }}</a>
+                ( <a href="{{ path("myshop_admin_category_edit", {id_category:cat.id}) }}">Редактировать</a> /
+                <a href="{{ path("myshop_admin_category_delete", {id_category:cat.id}) }}">Удалить</a> )
+            </li>
         {% endfor %}
     </ul>
 {% endif %}

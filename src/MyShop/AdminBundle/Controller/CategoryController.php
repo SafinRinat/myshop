@@ -63,22 +63,54 @@ class CategoryController extends Controller
     }
 
     /**
-     * @Route("/category/edit/")
-     * @return array
+     * @Route("/category/edit/{id_category}", requirements={"id_category":"\d+"})
+     * @param Request $request
+     * @param $id_category
+     * @return rendered template
      */
-    public function editAction()
+    public function editAction(Request $request, $id_category)
     {
+        $category = $this->getDoctrine()->getRepository("MyShopDefaultBundle:Category")->find($id_category);
+
+        $form = $this->createForm(CategoryType::class, $category);
+
+        if ($request->isMethod("POST"))
+        {
+            $form->handleRequest($request);
+
+            if ($form->isSubmitted())
+            {
+                $manager = $this->getDoctrine()->getManager();
+                $manager->persist($category);
+                $manager->flush();
+
+                return $this->redirectToRoute("myshop_admin_category_list");
+            }
+        }
 
         return $this->render('MyShopAdminBundle:Category:edit.html.twig', [
-
+            'form' => $form->createView(),
+            'category' => $category
         ]);
     }
 
-    public function deleteAction()
+    /**
+     * @Route("/category/delete/{id_category}", requirements={"id_category":"\d+"})
+     * @Method({"GET", "POST"})
+     * @param $id_category
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     */
+    public function deleteAction($id_category)
     {
+        $deletedCategory = $this
+            ->getDoctrine()
+            ->getRepository("MyShopDefaultBundle:Category")
+            ->find($id_category);
+        $manager = $this->getDoctrine()->getManager();
 
-        return $this->render('MyShopAdminBundle:Category:edit.html.twig', [
+        $manager->remove($deletedCategory);
+        $manager->flush();
 
-        ]);
+        return $this->redirectToRoute("myshop_admin_category_list");
     }
 }

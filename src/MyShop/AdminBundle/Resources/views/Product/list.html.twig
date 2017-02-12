@@ -19,7 +19,7 @@
         <td>
             <a href="{{ path("myshop_admin_product_delete", {id:product.id}) }}">Удалить</a><br/>
             <a href="{{ path("myshop_admin_product_edit", {id:product.id}) }}">Редактирование</a><br>
-            <a href="{{ path("myshop_admin_productphoto_list", {idProduct:product.getId()}) }}">Управление картинками</a>
+            <a href="{{ path("myshop_admin_productphoto_list", {id_product:product.getId()}) }}">Управление картинками</a>
         </td>
     </tr>
 {% endfor %}

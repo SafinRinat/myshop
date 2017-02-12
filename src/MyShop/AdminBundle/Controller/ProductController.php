@@ -12,7 +12,7 @@ use Symfony\Component\HttpFoundation\Request;
 class ProductController extends Controller
 {
     /**
-     * @Route("/product/{id}/delete/", requirements={"id":"\d+"})
+     * @Route("/product/delete/{id}/", requirements={"id":"\d+"})
      * @Method({"GET", "POST"})
      * @param $id
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
@@ -33,7 +33,7 @@ class ProductController extends Controller
 
 
     /**
-     * @Route("/category/{id_category}/product/list", requirements={"id_category": "\d+"})
+     * @Route("/category/product/list/{id_category}/", requirements={"id_category": "\d+"})
      * @Method({"GET", "POST"})
      * @param $id_category
      * @return \Symfony\Component\HttpFoundation\Response
@@ -49,7 +49,7 @@ class ProductController extends Controller
     }
 
     /**
-     * @Route("/product/list")
+     * @Route("/product/list/")
      * @return array|\Symfony\Component\HttpFoundation\Response
      */
     public function listAction()
@@ -65,7 +65,7 @@ class ProductController extends Controller
     }
 
     /**
-     * @Route("/product/{id}/edit", requirements={ "id": "\d+"})
+     * @Route("/product/edit/{id}/", requirements={ "id": "\d+"})
      * @Method({"GET", "POST"})
      * @param Request $request
      * @param $id
