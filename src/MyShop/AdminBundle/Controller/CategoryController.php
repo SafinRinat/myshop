@@ -13,28 +13,31 @@ use Symfony\Component\HttpFoundation\Request;
 class CategoryController extends Controller
 {
     /**
-     * @Route("/category/list/")
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @Route("/category/list/{id_parent}", defaults={"id_parent" : null}, requirements={"id_parent" : "\d+"})
      */
-    public function listAction()
+    public function listAction($id_parent = null)
     {
-        $categoryList = $this->getDoctrine()
-            ->getManager()
-            ->createQuery("SELECT cat_name FROM MyShopDefaultBundle:Category cat_name WHERE cat_name.parentCategory is null")
-            ->getResult();
+        $manager = $this->getDoctrine()->getManager();
+        $viewData = [];
 
-        return $this->render('MyShopAdminBundle:Category:list.html.twig', [
-            "categoryList" => $categoryList
-        ]);
+        if (is_null($id_parent)) {
+            $viewData["categoryList"] = $manager
+                ->createQuery("SELECT cat_name FROM MyShopDefaultBundle:Category cat_name")
+                ->getResult();
+        } else {
+            $parentCategory = $manager->getRepository("MyShopDefaultBundle:Category")->find($id_parent);
+            $viewData["categoryList"] = $parentCategory->getChildrenCategories();
+            $viewData["categoryParent"] = $parentCategory;
+        }
+        return $this->render('MyShopAdminBundle:Category:list.html.twig', $viewData);
     }
 
     /**
-     * @Route("/category/add/{idParent}", defaults= {"idParent" = null}, requirements={"idParent":  "\d+"})
+     * @Route("/category/add/{id_parent}", defaults={"id_parent" : null}, requirements={"id_parent" : "\d+"})
      * @Method({"GET", "POST"})
      * @param Request $request
-     * @return array|\Symfony\Component\HttpFoundation\RedirectResponse
      */
-    public function addAction(Request $request, $idParent = null)
+    public function addAction(Request $request, $id_parent = null)
     {
         $category = new Category();
         $form = $this->createForm(CategoryType::class, $category);
@@ -45,9 +48,9 @@ class CategoryController extends Controller
 
             $manager = $this->getDoctrine()->getManager();
 
-            if ($idParent !== null)
+            if ($id_parent !== null)
             {
-                $parentCat = $this->getDoctrine()->getManager()->getRepository("MyShopDefaultBundle:Category")->find($idParent);
+                $parentCat = $this->getDoctrine()->getManager()->getRepository("MyShopDefaultBundle:Category")->find($id_parent);
                 $category->setParentCategory($parentCat);
             }
 
@@ -58,15 +61,15 @@ class CategoryController extends Controller
         }
 
         return $this->render('MyShopAdminBundle:Category:add.html.twig', [
-            'form' => $form->createView()
+            "form" => $form->createView(),
+            "id_parent" => $id_parent
         ]);
     }
 
     /**
-     * @Route("/category/edit/{id_category}", requirements={"id_category":"\d+"})
+     * @Route("/category/edit/{id_category}", requirements={"id_category" : "\d+"})
      * @param Request $request
      * @param $id_category
-     * @return rendered template
      */
     public function editAction(Request $request, $id_category)
     {
@@ -95,8 +98,7 @@ class CategoryController extends Controller
     }
 
     /**
-     * @Route("/category/delete/{id_category}", requirements={"id_category":"\d+"})
-     * @Method({"GET", "POST"})
+     * @Route("/category/delete/{id_category}", requirements={"id_category" : "\d+"})
      * @param $id_category
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */

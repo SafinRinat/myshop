@@ -1,14 +1,17 @@
 {% extends "@MyShopAdmin/layout.html.twig" %}
 
 {% block body %}
-
-<a href="{{ path("myshop_admin_category_add") }}">Добавить категорию</a>
-
+{% if categoryParent is defined %}
+    <h4>{{ categoryParent.name }}</h4>
+    <a href="{{ path("myshop_admin_category_add", {id_parent:categoryParent.id}) }}">Добавить подкатегорию</a>
+{% else %}
+    <a href="{{ path("myshop_admin_category_add")}}">Добавить категорию</a>
+{% endif %}
 {% if categoryList != null %}
     <ul>
         {% for cat in categoryList %}
             <li>
-                <a href="{{ path("myshop_admin_product_listbycategory", {id_category:cat.id}) }}">{{ cat.name }}</a>
+                <a href="{{ path("myshop_admin_category_list", {id_parent:cat.id}) }}">{{ cat.name }}</a>
                 ( <a href="{{ path("myshop_admin_category_edit", {id_category:cat.id}) }}">Редактировать</a> /
                 <a href="{{ path("myshop_admin_category_delete", {id_category:cat.id}) }}">Удалить</a> )
             </li>

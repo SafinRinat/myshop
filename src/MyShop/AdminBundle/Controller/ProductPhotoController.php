@@ -89,7 +89,7 @@ class ProductPhotoController extends Controller
     }
 
     /**
-     * @Route("/product/{id_product}/photo/delete/{id_photo}", requirements={"id_product","\d+", "id_photo","\d+"})
+     * @Route("/product/{id_product}/photo/delete/{id_photo}", requirements={"id_product": "\d+", "id_photo": "\d+"})
      * @param $id_photo
      *
      */
@@ -117,7 +117,7 @@ class ProductPhotoController extends Controller
     }
 
     /**
-     * @Route("/product/{id_product}/photo/edit/{id_photo}/", requirements={"id_product": "\d+", "id_photo","\d+"})
+     * @Route("/product/{id_product}/photo/edit/{id_photo}/", requirements={"id_product": "\d+", "id_photo": "\d+"})
      *
      */
     public function editPhotoAction(Request $request, $id_product, $id_photo)
