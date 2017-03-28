@@ -40,16 +40,17 @@ class ProductType extends AbstractType
             ->add('description', TextareaType::class,[
                 'label' => 'Подробное описание: '
             ])
-            ->add('dateStockStart', DateType::class, [
-                'label' => 'Начала акции: '
-            ])
-            ->add('dateStockEnd', DateType::class, [
-                'label' => 'Конец акции: '
-            ])
-            ->add('stockStatus', ChoiceType::class, [
-                'choices' => ['In Stock' => true, 'Out of Stock' => false],
-                'placeholder' => 'Choose an option'
-            ]);
+//            ->add('dateStockStart', DateType::class, [
+//                'label' => 'Начала акции: '
+//            ])
+//            ->add('dateStockEnd', DateType::class, [
+//                'label' => 'Конец акции: '
+//            ])
+//            ->add('stockStatus', ChoiceType::class, [
+//                'choices' => ['In Stock' => true, 'Out of Stock' => false],
+//                'placeholder' => 'Choose an option'
+//            ])
+        ;
     }
 
     /**

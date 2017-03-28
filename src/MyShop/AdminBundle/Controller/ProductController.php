@@ -49,27 +49,10 @@ class ProductController extends Controller
     }
 
     /**
-     * @Route("/product/list/")
-     * @return array|\Symfony\Component\HttpFoundation\Response
-     */
-    public function listAction()
-    {
-        $productList = $this->getDoctrine()
-            ->getManager()
-            ->createQuery("select p, c from MyShopDefaultBundle:Product p join p.category c")
-            ->getResult();
-
-        return $this->render("MyShopAdminBundle:Product:list.html.twig", [
-            "productList" => $productList
-        ]);
-    }
-
-    /**
      * @Route("/product/edit/{id}/", requirements={ "id": "\d+"})
      * @Method({"GET", "POST"})
      * @param Request $request
      * @param $id
-     * @return array|\Symfony\Component\HttpFoundation\RedirectResponse
      */
     public function editAction(Request $request, $id)
     {
@@ -99,9 +82,24 @@ class ProductController extends Controller
     }
 
     /**
+     * @Route("/product/list/")
+     * @return array|\Symfony\Component\HttpFoundation\Response
+     */
+    public function listAction()
+    {
+        $productList = $this->getDoctrine()
+            ->getManager()
+            ->createQuery("select p, c from MyShopDefaultBundle:Product p join p.category c")
+            ->getResult();
+
+        return $this->render("MyShopAdminBundle:Product:list.html.twig", [
+            "productList" => $productList
+        ]);
+    }
+
+    /**
      * @Route("/product/add/")
      * @param Request $request
-     * @return array|\Symfony\Component\HttpFoundation\RedirectResponse
      */
     public function addAction(Request $request)
     {
