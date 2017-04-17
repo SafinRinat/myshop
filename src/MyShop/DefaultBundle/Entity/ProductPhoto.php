@@ -36,11 +36,39 @@ class ProductPhoto
     private $fileName;
 
     /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="date_created_at", type="datetime")
+     */
+    private $dateCreatedAt;
+
+    /**
      * @var string
      *
-     * @ORM\Column(name="small_file_name", type="string", length=255)
+     * @ORM\Column(name="main_file_name", type="string", length=255)
      */
-    private $smallFileName;
+    private $mainFileName;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="mobile_file_name", type="string", length=255)
+     */
+    private $mobileFileName;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="thumb_file_name", type="string", length=255)
+     */
+    private $thumbFileName;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="basket_file_name", type="string", length=255)
+     */
+    private $basketFileName;
 
     /**
      * @var Product
@@ -50,6 +78,28 @@ class ProductPhoto
      */
     private $product;
 
+    public function __construct()
+    {
+        $date = new \DateTime("now");
+        $this->setDateCreatedAt($date);
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getDateCreatedAt()
+    {
+        return $this->dateCreatedAt;
+    }
+
+    /**
+     * @param \DateTime $dateCreatedAt
+     */
+    public function setDateCreatedAt($dateCreatedAt)
+    {
+        $this->dateCreatedAt = $dateCreatedAt;
+    }
+
     /**
      * Get id
      *
@@ -58,22 +108,6 @@ class ProductPhoto
     public function getId()
     {
         return $this->id;
-    }
-
-    /**
-     * @return string
-     */
-    public function getSmallFileName()
-    {
-        return $this->smallFileName;
-    }
-
-    /**
-     * @param string $smallFileName
-     */
-    public function setSmallFileName($smallFileName)
-    {
-        $this->smallFileName = $smallFileName;
     }
 
     /**
@@ -146,6 +180,84 @@ class ProductPhoto
     public function getProduct()
     {
         return $this->product;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMainFileName()
+    {
+        return $this->mainFileName;
+    }
+
+    /**
+     * @param string $mainFileName
+     */
+    public function setMainFileName($mainFileName)
+    {
+        $this->mainFileName = $mainFileName;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMobileFileName()
+    {
+        return $this->mobileFileName;
+    }
+
+    /**
+     * @param string $mobileFileName
+     */
+    public function setMobileFileName($mobileFileName)
+    {
+        $this->mobileFileName = $mobileFileName;
+    }
+
+    /**
+     * @return string
+     */
+    public function getThumbFileName()
+    {
+        return $this->thumbFileName;
+    }
+
+    /**
+     * @param string $thumbFileName
+     */
+    public function setThumbFileName($thumbFileName)
+    {
+        $this->thumbFileName = $thumbFileName;
+    }
+
+    /**
+     * @return string
+     */
+    public function getBasketFileName()
+    {
+        return $this->basketFileName;
+    }
+
+    /**
+     * @param string $basketFileName
+     */
+    public function setBasketFileName($basketFileName)
+    {
+        $this->basketFileName = $basketFileName;
+    }
+
+    /**
+     * @return array
+     */
+    public function getUnlinkNames()
+    {
+        return $names = [
+            $this->fileName,
+            $this->mobileFileName,
+            $this->mainFileName,
+            $this->thumbFileName,
+            $this->basketFileName
+        ];
     }
 }
 

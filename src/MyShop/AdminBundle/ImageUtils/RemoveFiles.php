@@ -1,21 +1,32 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: rinat
- * Date: 3/26/17
- * Time: 02:17
- */
 
 namespace MyShop\AdminBundle\ImageUtils;
-
+use MyShop\AdminBundle\DTO\UploadedImageResult;
 
 class RemoveFiles
 {
-    protected $photoArray = [];
-    public function __construct($photoArray = null)
+    /**
+     * @var array
+     */
+    private $photoArray = [];
+    private $imageUploadDir;
+
+    public function __construct($imageUploadDir)
+    {
+        $this->imageUploadDir = $imageUploadDir;
+    }
+
+    public function setPhotoArray($photoArray)
     {
         $this->photoArray = $photoArray;
     }
 
-
+    public function removeFiles()
+    {
+        foreach ($this->photoArray as $value) {
+            if (file_exists($this->imageUploadDir . $value)) {
+                unlink($this->imageUploadDir . $value);
+            }
+        }
+    }
 }

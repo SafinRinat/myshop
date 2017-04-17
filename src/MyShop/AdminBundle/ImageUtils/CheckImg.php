@@ -25,10 +25,12 @@ class CheckImg
         $this->supportImageTypeList = $imageTypeList;
     }
 
+    //почему UploadedFile ?
     public function check(UploadedFile $photoFile)
     {
         $checkTrue = false;
         $mimeType = $photoFile->getClientMimeType();
+        $mimeType = strtolower($mimeType);
         foreach ($this->supportImageTypeList as $imgType) {
             if ($mimeType == $imgType[1]) {
                 $checkTrue = true;

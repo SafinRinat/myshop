@@ -1,16 +1,22 @@
 services:
-  myshop_admin.image_uploader:
+  myshop_admin.upload_image_service:
       class: MyShop\AdminBundle\ImageUtils\UploadImageService
       arguments:
-                - "@myshop_admin.check_img"
-                - "@myshop_admin.image_name_generator"
+              - "@myshop_admin.check_img"
+              - "@myshop_admin.image_name_generator"
+              - "%list_size_upload_images%"
       calls:
-                - ["setUploadImageRootDir", ["%image_upload_dir%"]]
+              - ["setUploadImageRootDir", ["%image_upload_dir%"]]
+
+  myshop_admin.remove_files:
+      class: MyShop\AdminBundle\ImageUtils\RemoveFiles
+      arguments:
+              - "%image_upload_dir%"
 
   myshop_admin.check_img:
       class: MyShop\AdminBundle\ImageUtils\CheckImg
       arguments:
-                - "%upload_image_type_list%"
+              - "%upload_image_type_list%"
 
   myshop_admin.image_name_generator:
       class: MyShop\AdminBundle\ImageUtils\ImageNameGenerator

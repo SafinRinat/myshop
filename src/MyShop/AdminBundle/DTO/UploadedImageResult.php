@@ -5,29 +5,57 @@ namespace MyShop\AdminBundle\DTO;
 
 class UploadedImageResult
 {
-    private $smallFileName;
-
-    private $bigFileName;
-
-    public function __construct($smallFileName, $bigFileName)
+    private $originalFile;
+    private $mobileFileName;
+    private $mainFileName;
+    private $thumbFileName;
+    private $basketFileName;
+    public function __construct($originalFile, Array $arrArgs)
     {
-        $this->smallFileName = $smallFileName;
-        $this->bigFileName = $bigFileName;
+        $this->originalFile = $originalFile;
+        $this->mobileFileName = $arrArgs["mobile"];
+        $this->mainFileName = $arrArgs["main"];
+        $this->thumbFileName = $arrArgs["thumb"];
+        $this->basketFileName = $arrArgs["basket"];
     }
 
     /**
-     * @return string
+     * @return mixed
      */
-    public function getSmallFileName()
+    public function getMobileFileName()
     {
-        return $this->smallFileName;
+        return $this->mobileFileName;
     }
 
     /**
-     * @return string
+     * @return mixed
      */
-    public function getBigFileName()
+    public function getMainFileName()
     {
-        return $this->bigFileName;
+        return $this->mainFileName;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getThumbFileName()
+    {
+        return $this->thumbFileName;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getBasketFileName()
+    {
+        return $this->basketFileName;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getOriginalFile()
+    {
+        return $this->originalFile;
     }
 }

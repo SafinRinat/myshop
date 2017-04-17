@@ -13,6 +13,34 @@ use Symfony\Component\HttpFoundation\Request;
 class CategoryController extends Controller
 {
     /**
+     * @Route("/category/tree")
+     */
+    public function treeAction()
+    {
+        $categoryList = $this->getDoctrine()->getRepository("MyShopDefaultBundle:Category")->findAll();
+        $results = [];
+        /** @var Category $cat */
+        foreach ($categoryList as $cat)
+        {
+            if ($cat->getParentCategory() !== null) {
+                $id_parent = $cat->getParentCategory()->getId();
+            } else {
+                $id_parent = "#";
+            }
+            $results[] = [
+                "id" => $cat->getId(),
+                "parent" => $id_parent,
+                "text" => $cat->getName() . " <a href='#'>[X]</a><a href='#'>[E]</a>"
+            ];
+        }
+
+        $dataJson = json_encode($results);
+        return $this->render("MyShopAdminBundle:Category:tree.html.twig", [
+            "categoryListJson" => $dataJson
+        ]);
+    }
+
+    /**
      * @Route("/category/list/{id_parent}", defaults={"id_parent" : null}, requirements={"id_parent" : "\d+"})
      */
     public function listAction($id_parent = null)
@@ -22,7 +50,7 @@ class CategoryController extends Controller
 
         if (is_null($id_parent)) {
             $viewData["categoryList"] = $manager
-                ->createQuery("SELECT cat_name FROM MyShopDefaultBundle:Category cat_name")
+                ->createQuery("SELECT cat_name FROM MyShopDefaultBundle:Category cat_name where cat_name.parentCategory is null")
                 ->getResult();
         } else {
             $parentCategory = $manager->getRepository("MyShopDefaultBundle:Category")->find($id_parent);

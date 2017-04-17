@@ -8,25 +8,20 @@ use MyShop\DefaultBundle\Entity\ProductPhoto;
 use MyShop\DefaultBundle\Form\ProductPhotoType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+//use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 
-class ProductPhotoController extends Controller
+class ProductPhotoController extends BaseController
 {
     /**
      * @Route("/photos/product/{id_product}/", requirements={"id_product": "\d+"})
      * @Method({"GET", "POST"})
      * @param $id_product
-     *
      */
     public function listAction($id_product)
     {
-        $product = $this->getDoctrine()
-            ->getManager()
-            ->getRepository("MyShopDefaultBundle:Product")
-            ->find($id_product);
-
+        $product = $this->getRepository("MyShopDefaultBundle:Product")->find($id_product);
         return $this->render("MyShopAdminBundle:ProductPhoto:list.html.twig", [
                 "product" => $product
         ]);
@@ -40,45 +35,35 @@ class ProductPhotoController extends Controller
      */
     public function addPhotoAction(Request $request, $id_product)
     {
-        $manager = $this->getDoctrine()->getManager();
-        $product = $manager->getRepository("MyShopDefaultBundle:Product")->find($id_product);
+        $product = $this->getRepository("MyShopDefaultBundle:Product")->find($id_product);
         if ($product == null) {
             return $this->createNotFoundException("Product not found!");
         }
-
         $photo = new ProductPhoto();
         $form = $this->createForm(ProductPhotoType::class, $photo);
-
-
-        if ($request->isMethod("POST"))
-        {
+        if ($request->isMethod("POST")) {
             $form->handleRequest($request);
-
             $filesAr = $request->files->get("myshop_defaultbundle_productphoto");
-
             /** @var UploadedFile $photoFile */
             $photoFile = $filesAr["photoFile"];
-
             $checkImgService = $this->get("myshop_admin.check_img");
-
             try {
                 $checkImgService->check($photoFile);
             } catch (\InvalidArgumentException $ex) {
                 die("Image type error!");
             }
-
-            $result = $this->get("myshop_admin.image_uploader")->uploadImage($photoFile, $id_product);
-
-            $photo->setSmallFileName($result->getSmallFileName());
-            $photo->setFileName($result->getBigFileName());
+            $result = $this->get("myshop_admin.upload_image_service")->uploadImage($photoFile, $id_product);
+            $photo->setFileName($result->getOriginalFile());
+            $photo->setMobileFileName($result->getMobileFileName());
+            $photo->setMainFileName($result->getMainFileName());
+            $photo->setThumbFileName($result->getThumbFileName());
+            $photo->setBasketFileName($result->getBasketFileName());
             $photo->setProduct($product);
-
+            $manager = $this->getManager();
             $manager->persist($photo);
             $manager->flush();
-
             return $this->redirectToRoute("myshop_admin_productphoto_list", ['id_product' => $id_product]);
         }
-
         return $this->render("MyShopAdminBundle:ProductPhoto:add.html.twig", [
                 "form" => $form->createView(),
                 "product" => $product
@@ -90,39 +75,17 @@ class ProductPhotoController extends Controller
      * @param $id_photo
      *
      */
-    public function deletePhotoAction($id_product, $id_photo) {
-
-//        $product = $this->getDoctrine()->getRepository("MyShopDefaultBundle:Product")->find($id_product);
-
+    public function deletePhotoAction($id_product, $id_photo)
+    {
         $productPhoto = $this
-            ->getDoctrine()
             ->getRepository("MyShopDefaultBundle:ProductPhoto")
             ->find($id_photo);
-
-//        $dirTo = $this->get("kernel")->getRootDir() . "/../web/photos/";
-        $dirTo = $this->container->getParameter("image_upload_dir");
-        //TODO: make service delete photos from upload folder
-        //small_file_name-> photo
-        $getSmallFileName = $productPhoto->getSmallFileName();
-        //file_name -> photo
-        $getFileName = $productPhoto->getFileName();
-
-        $photoArray = [
-            $dirTo . $getSmallFileName,
-            $dirTo . $getFileName
-        ];
-
-        foreach ($photoArray as $value) {
-            if (file_exists($value)) {
-                unlink($value);
-            }
-        }
-
-        $manager = $this->getDoctrine()->getManager();
-
+        $removeFiles = $this->get("myshop_admin.remove_files");
+        $removeFiles->setPhotoArray($productPhoto->getUnlinkNames());
+        $removeFiles->removeFiles();
+        $manager = $this->getManager();
         $manager->remove($productPhoto);
         $manager->flush();
-
         return $this->redirectToRoute("myshop_admin_productphoto_list", ['id_product' => $id_product]);
     }
 
@@ -133,39 +96,25 @@ class ProductPhotoController extends Controller
     public function editPhotoAction(Request $request, $id_product, $id_photo)
     {
 
-        $product = $this->getDoctrine()->getRepository("MyShopDefaultBundle:Product")->find($id_product);
+        $product = $this->getRepository("MyShopDefaultBundle:Product")->find($id_product);
         if ($product == null) {
             return $this->createNotFoundException("Product not found!");
         }
-//        $dirTo = $this->get("kernel")->getRootDir() . "/../web/photos/";
-        $dirTo = $this->container->getParameter("image_upload_dir");
 
-        $productPhoto = $this
-            ->getDoctrine()
+        $photo = $this
             ->getRepository("MyShopDefaultBundle:ProductPhoto")
             ->find($id_photo);
-        
-//        $photo = $this->getDoctrine()->getRepository("MyShopDefaultBundle:ProductPhoto")->find($id_photo);
-        //small_file_name-> photo
-        $getSmallFileName = $productPhoto->getSmallFileName();
-        //file_name -> photo
-        $getFileName = $productPhoto->getFileName();
-        $photoArray = [
-            $dirTo . $getSmallFileName,
-            $dirTo . $getFileName
-        ];
-
-        $form = $this->createForm(ProductPhotoType::class, $productPhoto);
-
+        $form = $this->createForm(ProductPhotoType::class, $photo);
+        $photoArray = $photo->getUnlinkNames();;
         if ($request->isMethod("POST"))
         {
             $form->handleRequest($request);
 
             if ($form->isSubmitted())
             {
-                $filesAr = $request->files->get("myshop_defaultbundle_productphoto");
+                $filesArr = $request->files->get("myshop_defaultbundle_productphoto");
                 /** @var UploadedFile $photoFile */
-                $photoFile = $filesAr["photoFile"];
+                $photoFile = $filesArr["photoFile"];
 
                 $checkImgService = $this->get("myshop_admin.check_img");
 
@@ -174,28 +123,26 @@ class ProductPhotoController extends Controller
                 } catch (\InvalidArgumentException $ex) {
                     die("Image type error!");
                 }
-                $result = $this->get("myshop_admin.image_uploader")->uploadImage($photoFile, $id_product);
-
-                $productPhoto->setSmallFileName($result->getSmallFileName());
-                $productPhoto->setFileName($result->getBigFileName());
-                $productPhoto->setProduct($product);
-
-                $manager = $this->getDoctrine()->getManager();
-                $manager->persist($productPhoto);
+                $result = $this->get("myshop_admin.upload_image_service")->uploadImage($photoFile, $id_product);
+                $photo->setFileName($result->getOriginalFile());
+                $photo->setMobileFileName($result->getMobileFileName());
+                $photo->setMainFileName($result->getMainFileName());
+                $photo->setThumbFileName($result->getThumbFileName());
+                $photo->setBasketFileName($result->getBasketFileName());
+                $photo->setProduct($product);
+                $manager = $this->getManager();
+                $manager->persist($photo);
                 $manager->flush();
-
-                foreach ($photoArray as $value) {
-                    if (file_exists($value)) {
-                        unlink($value);
-                    }
-                }
+                $removeFiles = $this->get("myshop_admin.remove_files");
+                $removeFiles->setPhotoArray($photoArray);
+                $removeFiles->removeFiles();
                 return $this->redirectToRoute("myshop_admin_productphoto_list", ['id_product' => $id_product]);
             }
         }
 
         return $this->render("MyShopAdminBundle:ProductPhoto:edit.html.twig", [
             "form" => $form->createView(),
-            "photo" => $productPhoto,
+            "photo" => $photo,
             'product'=> $product
         ]);
     }

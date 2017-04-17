@@ -13,23 +13,20 @@ class UploadImageService
      * @var CheckImg
     */
     private $checkImg;
-
     /**
      * @var ImageNameGenerator
     */
     private $imageNameGenerator;
-
     private $uploadImageRootDir;
+    private $listSizeUploadImage;
 
-    private $photoFileName;
-
-    private $smallPhotoName;
-
-
-    public function __construct(CheckImg $checkImg, ImageNameGenerator $imageNameGenerator)
+    public function __construct(CheckImg $checkImg,
+                                ImageNameGenerator $imageNameGenerator,
+                                $listSizeUploadImage)
     {
         $this->checkImg = $checkImg;
         $this->imageNameGenerator = $imageNameGenerator;
+        $this->listSizeUploadImage = $listSizeUploadImage;
     }
 
     public function setUploadImageRootDir($imageRootDir)
@@ -43,30 +40,30 @@ class UploadImageService
     }
 
     /**
-     * @return UploadedImageResult
-    */
-    public function uploadImage(UploadedFile $uploadedFile, $productId,  $width = 250, $height = 200)
+     * @param UploadedFile $uploadedFile
+     * @param $product_id
+     * @return UploadedImageResult $result
+     * @throws \Exception
+     */
+    public function uploadImage(UploadedFile $uploadedFile, $product_id)
     {
-        $imageNameGenerator = $this->imageNameGenerator;
-
-        $photoFileName = $productId . $imageNameGenerator->generateName() . "." . $uploadedFile->getClientOriginalExtension();
-        $photoDirPath = $this->uploadImageRootDir;
-
+        $originalFile = $product_id .
+                        $this->imageNameGenerator->generateName() . "." .
+                        $uploadedFile->getClientOriginalExtension();
         try {
-            $uploadedFile->move($photoDirPath, $photoFileName);
-        }
-        catch (\Exception $exception) {
-            echo "Can not move file!";
+            $uploadedFile->move($this->uploadImageRootDir, $originalFile);
+        } catch (\Exception $exception) {
+            echo "Can not move file - upload_max_filesize > limit = 2048kb!";
             throw $exception;
         }
-
-        $img = new ImageResize($photoDirPath . $photoFileName);
-        $img->resizeToBestFit($width, $height);
-        $smallPhotoName = "small_" . $photoFileName;
-        $img->save($photoDirPath . $smallPhotoName);
-
-        $result = new UploadedImageResult($smallPhotoName, $photoFileName);
-
+        $arrArgs = [];
+        foreach ($this->listSizeUploadImage as $key => $value) {
+            $imgResize = new ImageResize($this->uploadImageRootDir . $originalFile);
+            $imgResize->resize($value["width"], $value["height"]);
+            $arrArgs[$key] = $key . "_" . $originalFile;
+            $imgResize->save($this->uploadImageRootDir . $arrArgs[$key]);
+        }
+        $result = new UploadedImageResult($originalFile, $arrArgs);
         return $result;
     }
 }

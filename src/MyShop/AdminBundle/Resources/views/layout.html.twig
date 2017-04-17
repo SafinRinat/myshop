@@ -4,7 +4,7 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
-        <link rel="stylesheet" type="text/css" href="{{ asset('bundles/myshopadmin/dist/bootstrap.min.css') }}" />
+        <link rel="stylesheet" type="text/css" href="{{ asset('bundles/myshopadmin/styles/dist/bootstrap.min.css') }}" />
         <link rel="stylesheet" type="text/css" href="{{ asset("bundles/myshopadmin/styles/main.css") }}" />
         <title>{% block title %}Панель администратора!{% endblock %}</title>
         {% block stylesheets %}{% endblock %}
@@ -78,7 +78,7 @@
                     1. сделать свой сервис для проверки расширения и mime type картинки (расширения и mime type должны
                     задаваться из конфига)
                 </li>
-                <li>
+                <li style="text-decoration: line-through;">
                     2. сделать ресайз картинки (пороговые значения ширины и высоты картинки должны задаваться из конфига)
                 </li>
                 <li>
@@ -152,6 +152,7 @@
                             <li><a href="{{ path("myshop_admin_product_list") }}">Товары</a></li>
                             <li><a href="{{ path("myshop_admin_product_listbycategory", {id_category:1}) }}">Товары по категориям</a></li>
                             <li><a href="{{ path("myshop_admin_category_list") }}">Категории товаров</a></li>
+                            <li><a href="{{ path("myshop_admin_category_tree") }}">Категории в виде дерева</a></li>
                         </ul>
                     </td>
                     <td valign="top">
@@ -162,8 +163,8 @@
             </table>
         </div>
 
-        <script type="text/javascript" src="{{ asset('bundles/myshopdefault/js/dist/jquery.min.js') }}"></script>
-        <script type="text/javascript" src="{{ asset('bundles/myshopdefault/js/dist/bootstrap/bootstrap.min.js') }}"></script>
+        <script type="text/javascript" src="{{ asset('bundles/myshopadmin/js/dist/jquery.min.js') }}"></script>
+        <script type="text/javascript" src="{{ asset('bundles/myshopadmin/js/dist/bootstrap/bootstrap.min.js') }}"></script>
         {% block javascripts %}{% endblock %}
     </body>
 </html>

@@ -9,7 +9,7 @@
         <tr>
             <td>{{ photo.getTitle() }}</td>
             <td>
-                <img src="/photos/{{ photo.getSmallFileName() }}" />
+                <img src="/photos/{{ photo.getThumbFileName() }}" />
             </td>
             <td>
                 ( <a href="{{ path("myshop_admin_productphoto_editphoto", { id_product:product.getId(), id_photo:photo.getId() }) }}">Редактирование</a> /
