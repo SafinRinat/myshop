@@ -2,4 +2,7 @@
 
 {% block body %}
     Admin panel (CMS)
+    {% if history is defined %}
+        {{ history|raw }}
+    {% endif %}
 {% endblock %}

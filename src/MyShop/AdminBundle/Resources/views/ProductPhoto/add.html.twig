@@ -2,7 +2,7 @@
 
 {% block body %}
     <h3>Добавление фото к товару {{ product.model }}</h3>
-    <form enctype="multipart/form-data" method="post" action="{{ path("myshop_admin_productphoto_addphoto", { id_product:product.getId() }) }}">
+    <form enctype="multipart/form-data" method="post" action="{{ path("myshop_admin_productphoto_addphoto", { productId:product.getId() }) }}">
         {{ form_widget(form) }}
         <input type="submit" value="Добавить" />
     </form>

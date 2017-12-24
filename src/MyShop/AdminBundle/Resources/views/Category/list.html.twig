@@ -5,7 +5,7 @@
     <h4>{{ categoryParent.name }}</h4>
     <a href="{{ path("myshop_admin_category_add", {id_parent:categoryParent.id}) }}">Добавить подкатегорию</a>
 {% else %}
-    <a href="{{ path("myshop_admin_category_add")}}">Добавить категорию</a>
+    <a href="{{ path("myshop_admin_category_add")}}">Добавить корневую категорию</a>
 {% endif %}
 {% if categoryList != null %}
     <ul>

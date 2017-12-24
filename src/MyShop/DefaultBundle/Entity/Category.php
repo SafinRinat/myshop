@@ -176,9 +176,17 @@ class Category
      *
      * @param \MyShop\DefaultBundle\Entity\Category $childrenCategory
      */
-    public function removeChildrenCategory(\MyShop\DefaultBundle\Entity\Category $childrenCategory)
+    public function removeChildrenCategory($childrenCategory)
     {
-        $this->childrenCategories->removeElement($childrenCategory);
+        $this->childrenCategories = $childrenCategory;
+
+//        foreach($childrenCategory as $key) {
+//
+//        }
+
+
+
+//        $this->childrenCategories->removeElement($childrenCategory);
     }
 
     /**

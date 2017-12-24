@@ -1,8 +1,9 @@
 {% extends "@MyShopAdmin/layout.html.twig" %}
 
 {% block body %}
-<form method="post" action="{{ path('myshop_admin_product_add') }}">
-{{ form_widget(form) }}
+<h3>Добавление товара</h3>
+<form method="POST" action="{{ path('myshop_admin_product_add') }}">
+    {{ form_widget(form) }}
     <input type="submit" />
 </form>
 {% endblock %}

@@ -2,14 +2,16 @@
 
 namespace MyShop\AdminBundle\Controller;
 
+use Doctrine\ORM\Query\Expr\Base;
 use MyShop\DefaultBundle\Entity\Product;
 use MyShop\DefaultBundle\Form\ProductType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use MyShop\AdminBundle\Controller\BaseController;
+//use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 
-class ProductController extends Controller
+class ProductController extends BaseController
 {
     /**
      * @Route("/product/delete/{id}/", requirements={"id":"\d+"})
@@ -19,15 +21,12 @@ class ProductController extends Controller
      */
     public function deleteAction($id)
     {
-        $product = $this
-                        ->getDoctrine()
-                        ->getRepository("MyShopDefaultBundle:Product")
-                        ->find($id);
-        $manager = $this->getDoctrine()->getManager();
-
+        $product = $this->getRepository("MyShopDefaultBundle:Product")->find($id);
+        $manager = $this->getManager();
         $manager->remove($product);
+        $this->get("session")->set("history",  $this->get("session")->get("history") . "<br> product delete");
         $manager->flush();
-
+        $this->addFlash("success", "Product was removed from database");
         return $this->redirectToRoute("myshop_admin_product_list");
     }
 
@@ -40,9 +39,13 @@ class ProductController extends Controller
      */
     public function listByCategoryAction($id_category)
     {
-        $category = $this->getDoctrine()->getRepository("MyShopDefaultBundle:Category")->find($id_category);
-        $productList = $category->getProductList();
-
+        $category = $this->getRepository("MyShopDefaultBundle:Category")->find($id_category);
+        $this->get("session")->set("history",  $this->get("session")->get("history") . "<br> product list by category");
+        if (is_null($category)) {
+            $productList = false;
+        } else {
+            $productList = $category->getProductList();
+        }
         return $this->render("MyShopAdminBundle:Product:list.html.twig", [
             "productList" => $productList
         ]);
@@ -53,11 +56,15 @@ class ProductController extends Controller
      * @Method({"GET", "POST"})
      * @param Request $request
      * @param $id
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function editAction(Request $request, $id)
     {
-        $product = $this->getDoctrine()->getRepository("MyShopDefaultBundle:Product")->find($id);
-
+        $product = $this->getRepository("MyShopDefaultBundle:Product")->find($id);
+        if ($product === null) {
+            $this->addFlash("error", "Product not found!");
+            return $this->redirectToRoute("myshop_admin_product_list");
+        }
         $form = $this->createForm(ProductType::class, $product);
 
         /******************************************/
@@ -67,10 +74,12 @@ class ProductController extends Controller
 
             if ($form->isSubmitted())
             {
-                $manager = $this->getDoctrine()->getManager();
+                $manager = $this->getManager();
                 $manager->persist($product);
                 $manager->flush();
 
+                $this->addFlash("success", "Product id: ". $id ." was edit");
+                $this->get("session")->set("history",  $this->get("session")->get("history") . "<br> product edit");
                 return $this->redirectToRoute("myshop_admin_product_list");
             }
         }
@@ -83,15 +92,14 @@ class ProductController extends Controller
 
     /**
      * @Route("/product/list/")
-     * @return array|\Symfony\Component\HttpFoundation\Response
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function listAction()
     {
-        $productList = $this->getDoctrine()
-            ->getManager()
-            ->createQuery("select p, c from MyShopDefaultBundle:Product p join p.category c")
+        $productList = $this->getManager()
+            ->createQuery("select p, c from MyShopDefaultBundle:Product p join  p.category c")
             ->getResult();
-
+        $this->get("session")->set("history", $this->get("session")->get("history") . "<br> product list");
         return $this->render("MyShopAdminBundle:Product:list.html.twig", [
             "productList" => $productList
         ]);
@@ -100,6 +108,7 @@ class ProductController extends Controller
     /**
      * @Route("/product/add/")
      * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function addAction(Request $request)
     {
@@ -113,9 +122,21 @@ class ProductController extends Controller
 
             if ($form->isSubmitted())
             {
-                $manager = $this->getDoctrine()->getManager();
+                $manager = $this->getManager();
                 $manager->persist($product);
                 $manager->flush();
+
+                // test notify to email
+                $messege = new \Swift_Message();
+                $messege->setTo("safinrinat87@gmail.com");
+                $messege->setFrom("e.symfony@gmail.com");
+                $messege->setBody("<b>Product add: </b>" . $product->getModel(), "text/html");
+                $messege->attach(\Swift_Attachment::fromPath($this->get("kernel")->getRootDir() . "/../web/photos/22424547636.png"));
+                $mailer = $this->get("mailer");
+                $mailer->send($messege);
+
+                $this->get("session")->set("history",  $this->get("session")->get("history") . "<br> product add");
+                $this->addFlash("success", "Product id: ". $product->getId() ." was add");
 
                 return $this->redirectToRoute("myshop_admin_product_list");
             }

@@ -1,8 +1,9 @@
 {% extends "@MyShopAdmin/layout.html.twig" %}
 
 {% block body %}
-<a href="{{ path("myshop_admin_product_add") }}">Добавить товар</a>
 
+<a href="{{ path("myshop_admin_product_add") }}">Добавить товар</a>
+{% if productList %}
 <table border="1">
     <tr>
         <td>Номер товара</td>
@@ -19,9 +20,12 @@
         <td>
             <a href="{{ path("myshop_admin_product_delete", {id:product.id}) }}">Удалить</a><br/>
             <a href="{{ path("myshop_admin_product_edit", {id:product.id}) }}">Редактирование</a><br>
-            <a href="{{ path("myshop_admin_productphoto_list", {id_product:product.getId()}) }}">Управление картинками</a>
+            <a href="{{ path("myshop_admin_productphoto_list", {productId:product.getId()}) }}">Управление картинками</a>
         </td>
     </tr>
 {% endfor %}
 </table>
+{% else %}
+    <h2 class="text-center">Список товаров пуст.</h2>
+{% endif %}
 {% endblock %}

@@ -1,7 +1,9 @@
 my_shop_admin:
-    resource: "@MyShopAdminBundle/Controller/"
-    type:     annotation
-    prefix:   /admin
+  resource: "@MyShopAdminBundle/Controller/"
+  type:     annotation
+  prefix:   /admin
+logout:
+  path: /logout
 
 my_shop_default:
     resource: "@MyShopDefaultBundle/Controller/"

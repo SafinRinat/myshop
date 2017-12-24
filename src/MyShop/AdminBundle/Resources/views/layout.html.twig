@@ -11,160 +11,57 @@
         <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
     </head>
     <body>
-        <div>
-            <div>
-                Домашнее задание: 25.01.17
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-1"></div>
+                <div class="col-md-10 bg-primary">
+                    <div class="small">
+                        {{ "Extantion twig message"|bold|red }}
+                    </div>
+                    <div class="small">
+                        {{ "absolute_url example : "|bold }}
+                        {{ absolute_url('bundles/myshopdefault/images/banner.jpg') }}
+                    </div>
+                </div>
+                <div class="col-md-1"></div>
             </div>
-            <ul>
-                <li style="text-decoration: line-through;">
-                    1. Создать Entity согласно вашим ТЗ (Product, Category, News, и.т.д. кто какие
-                    придумал себе в ТЗ).
-                </li>
-                <li  style="text-decoration: line-through;">
-                    2. Настроить соединение с базой данных
-                </li>
-                <li  style="text-decoration: line-through;">
-                    3. Создать базу данных.
-                </li>
-                <li  style="text-decoration: line-through;">
-                    4. выгрузить на GitHub в репозиторий
-                </li>
-                <li  style="text-decoration: line-through;">
-                    5. Ссылку на репозиторий кинуть мне в скайп или на емеил
-                </li>
-            </ul>
-
-            <div>
-                Домашнее задание: 30.01.2017
-            </div>
-            <ul>
-                <li style="text-decoration: line-through;">
-                    1. создать AdminBundle
-                </li>
-                <li  style="text-decoration: line-through;">
-                    2. для всех ваших Entity создать CRUD (функционал: добавлене, редактирование и удаление).
-                    1 Entity >= 1 Controller
-                </li>
-                <li  style="text-decoration: line-through;">
-                    3. выложить в GIT
-                </li>
-            </ul>
-            <div>
-                Домашнее задание: 02.02.17
-            </div>
-            <ul>
-                <li  style="text-decoration: line-through;">
-                    1. Создать Entity фото для вашего товара
-                </li>
-                <li style="text-decoration: line-through;">
-                    2. настроить связи между товаром и фото товара
-                </li>
-                <li style="text-decoration: line-through;">
-                    <span>
-                        3. Сделать загрузку фотографий и функционал добавления, редактирования и удаления.
-                    </span>
-
-                    Редактирование имеется ввиду, редактирование полей которые сопутствуют сущности фото товара
-                    (если кто-то сможет сделать редактирование самой фото, то есть, при редактировании если пользователь
-                    загружает новую фото, то старая фотка удоляется - будет очень круто и +1 к карме  ).
-                </li>
-            </ul>
-
-            <div>
-                Домашнее задание: 05.02.17
-            </div>
-            <ul>
-                <li style="text-decoration: line-through;">
-                    1. сделать свой сервис для проверки расширения и mime type картинки (расширения и mime type должны
-                    задаваться из конфига)
-                </li>
-                <li style="text-decoration: line-through;">
-                    2. сделать ресайз картинки (пороговые значения ширины и высоты картинки должны задаваться из конфига)
-                </li>
-                <li>
-                    3. сделать свою категорию в виде дерева
-                </li>
-            </ul>
-
-            <div>
-                Домашнее задание: 12.02.2017
-            </div>
-            <ul>
-                <li>
-                    1. Установить шаблон (имеется ввиду натянуть на шаблонизатор Twig в своем проекте) который вы
-                    выбрали для своего интернет магазина.
-                </li>
-                <li>
-                    2. Сделать сервис по загрузке фотографий (по аналогии как мы сегодня делали на занятии).
-                </li>
-                <li>
-                    3. Добавить Flash Message после действия добавление товара (или картинки или категорий),
-                    редатирования, удаления.
-                </li>
-            </ul>
-            <div>
-                Домашнее задание: 19.02.2017
-            </div>
-            <ul>
-                <li>
-                    1. Создать сервис по рассылке сообщений
-                </li>
-                <li>
-                    2. При каждом действии пользователя в админке отправлять уведомление на емеил. (минимум 5 действий.
-                        Одно действие это к примеру: добавление товара или создание категории)
-                </li>
-            </ul>
-
-            <div>
-                Домашнее задание: 16.02.2017
-            </div>
-            <ul>
-                <li>*Установите ваш выбранный шаблон (натяните html верстку на twig шаблонизатор) на ваш проект магазина!</li>
-            </ul>
-            <div>
-                Домашнее задание: 26.02.2017 18:40:29 - 22:57:23
-            </div>
-            <ul>
-                <li>
-                    Домашнее задание: разработать api (REST или JSON-RPC). Минимум 2 действия.
-                    1. При запросе отдавать весь список товаров с картиной (модель, идшник, цена, картинка).
-                    2. При запросе отдавать информацию о конкретном товаре (все данные о товаре).
-                </li>
-                <li>
-                    Формат ответа любой нп ваш выбор. Json или xml
-                </li>
-                <li>
-                    Да и еще одно дополнение к домашке (да в этот раз домашка будет не маленькой):
-                    Для Entity Product вам необходимо добавить Constraints (Assert-ы который я сегодня на занятии показывал)
-                    и сделать проверку валидации при добавлении товара
-                </li>
-            </ul>
         </div>
         <div id="app">
-            <table border="1" style="width: 100%">
-                <tr>
-                    <td colspan="2"><h3>Admin panel</h3></td>
-                </tr>
-                <tr>
-                    <td valign="top" style="width: 400px">
-                        <ul>
-                            <li><a href="{{ path("myshop_admin_default_index") }}">Главная</a></li>
-                            <li><a href="{{ path("myshop_admin_product_list") }}">Товары</a></li>
-                            <li><a href="{{ path("myshop_admin_product_listbycategory", {id_category:1}) }}">Товары по категориям</a></li>
-                            <li><a href="{{ path("myshop_admin_category_list") }}">Категории товаров</a></li>
-                            <li><a href="{{ path("myshop_admin_category_tree") }}">Категории в виде дерева</a></li>
-                        </ul>
-                    </td>
-                    <td valign="top">
-                        {% block body %}
-                        {% endblock %}
-                    </td>
-                </tr>
-            </table>
-        </div>
-
-        <script type="text/javascript" src="{{ asset('bundles/myshopadmin/js/dist/jquery.min.js') }}"></script>
-        <script type="text/javascript" src="{{ asset('bundles/myshopadmin/js/dist/bootstrap/bootstrap.min.js') }}"></script>
-        {% block javascripts %}{% endblock %}
+            {% block app %}
+                <table border="1" style="width: 100%">
+                    <tr>
+                        <td colspan="2"><h3>Admin panel</h3> Welcome {{ app.user }}!!!</td>
+                    </tr>
+                    <tr>
+                        <td valign="top" style="width: 400px">
+                            <ul>
+                                <li><a href="{{ path("myshop_admin_default_index") }}">Главная</a></li>
+                                <li><a href="{{ path("myshop_admin_product_list") }}">Товары</a></li>
+                                <li><a href="{{ path("myshop_admin_product_listbycategory", {id_category: 1}) }}">Товары по категориям</a></li>
+                                <li><a href="{{ path("myshop_admin_category_list") }}">Категории товаров</a></li>
+                                <li><a href="{{ path("myshop_admin_category_tree") }}">Категории в виде дерева</a></li>
+                                <li><a href="{{ path("myshop_admin_default_homework") }}">Home Work List</a></li>
+                            </ul>
+                        </td>
+                        <td valign="top">
+                            {% for flash_message in app.session.flashBag.get('error') %}
+                                <div class="flash_message err">
+                                    ERROR : {{ flash_message }}
+                                </div>
+                            {% endfor %}
+                            {% for flash_message in app.session.flashBag.get('success') %}
+                                <div class="flash_message suc">
+                                    SUCCESS : {{ flash_message }}
+                                </div>
+                            {% endfor %}
+                            {% block body %}{% endblock %}
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <script type="text/javascript" src="{{ asset('bundles/myshopadmin/js/dist/jquery.min.js') }}"></script>
+            <script type="text/javascript" src="{{ asset('bundles/myshopadmin/js/dist/bootstrap/bootstrap.min.js') }}"></script>
+            {% block javascripts %}{% endblock %}
+        {% endblock %}
     </body>
 </html>

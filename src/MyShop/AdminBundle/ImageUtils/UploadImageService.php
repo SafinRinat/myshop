@@ -41,13 +41,13 @@ class UploadImageService
 
     /**
      * @param UploadedFile $uploadedFile
-     * @param $product_id
+     * @param $productId
      * @return UploadedImageResult $result
      * @throws \Exception
      */
-    public function uploadImage(UploadedFile $uploadedFile, $product_id)
+    public function uploadImage(UploadedFile $uploadedFile, $productId)
     {
-        $originalFile = $product_id .
+        $originalFile = $productId .
                         $this->imageNameGenerator->generateName() . "." .
                         $uploadedFile->getClientOriginalExtension();
         try {

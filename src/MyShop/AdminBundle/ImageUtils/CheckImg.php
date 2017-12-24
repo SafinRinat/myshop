@@ -30,25 +30,30 @@ class CheckImg
     {
         $checkTrue = false;
         $mimeType = $photoFile->getClientMimeType();
+        $fileExt = $photoFile->getClientOriginalExtension();
+
         $mimeType = strtolower($mimeType);
+
         foreach ($this->supportImageTypeList as $imgType) {
-            if ($mimeType == $imgType[1]) {
+            if ($mimeType === $imgType[1]) {
                 $checkTrue = true;
             }
         }
+
         if ($checkTrue !== true) {
+//            $this->addFlash("error", "Mime type is blocked!");
             throw new \InvalidArgumentException("Mime type is blocked!");
         }
 
-        $fileExt = $photoFile->getClientOriginalExtension();
         $checkTrue = false;
         foreach ($this->supportImageTypeList as $imgType) {
-            if ($fileExt == $imgType[0]) {
+            if ($fileExt === $imgType[0]) {
                 $checkTrue = true;
             }
         }
 
         if ($checkTrue == false) {
+//            $this->addFlash("error", "Extension is blocked!");
             throw new \InvalidArgumentException("Extension is blocked!");
         }
 

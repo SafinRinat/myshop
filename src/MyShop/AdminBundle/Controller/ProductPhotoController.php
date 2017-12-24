@@ -15,27 +15,82 @@ use Symfony\Component\HttpFoundation\Request;
 class ProductPhotoController extends BaseController
 {
     /**
-     * @Route("/photos/product/{id_product}/", requirements={"id_product": "\d+"})
+     * @Route("/test/{photoId}/", requirements={"photoId": "\d+"})
      * @Method({"GET", "POST"})
-     * @param $id_product
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
-    public function listAction($id_product)
+    public function testAction($photoId) {
+        $photo = $this->getRepository("MyShopDefaultBundle:ProductPhoto")->find($photoId);
+        $productId = $photo->getProduct()->getId();
+        $sendMail = $this->get("myshop_admin.send_email");
+        $sendMail->setRecipientName("Rinat Safin");
+        $sendMail->setRecipientEmail("safinrinat87@gmail.com");
+        $sendMail->setMessage("АХАХА ЭТО Я");
+        $sendMail->sendNotifyEmail("ACTION");
+//        $sendMail->sendMail("test action");
+        $this->addFlash("success", "test email has been send!");
+        return $this->redirectToRoute("myshop_admin_productphoto_list", [
+            "productId" => $productId
+        ]);
+//        $sendMail->sendNotifyEmail();
+//        $sendMail->sendMail("testAction");
+    }
+    /**
+     * @Route("/photos/product/{photoId}/sendmail", requirements={"photoId": "\d+"})
+     * @Method({"GET", "POST"})
+     * @param $photoId
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     */
+    public function sendToMailAction($photoId)
     {
-        $product = $this->getRepository("MyShopDefaultBundle:Product")->find($id_product);
+        //        don't work extend BaseController ->find  and $photo->getFileName();
+        //        $photo = $this->getRepository("MyShopDefaultBundle:ProductPhoto");
+        $photo = $this->getRepository("MyShopDefaultBundle:ProductPhoto")->find($photoId);
+        $photoFile = $this->get("kernel")->getRootDir() . "/../web/photos/" . $photo->getFileName();
+        $productId = $photo->getProduct()->getId();
+
+        $messege = new \Swift_Message();
+        $messege->setTo("safinrinat87@gmail.com");
+        $messege->setFrom("e.symfony@gmail.com");
+        //template html email $view
+        //https://youtu.be/aEF2O1FhAmw?t=2733
+//        $htmlResult = $this->renderView("MyShopAdminBundle::result.html.twig", [
+//            "name" => "User",
+//        ]);
+        $messege->setBody("Take are photo", "text/html");
+        $messege->attach(\Swift_Attachment::fromPath($photoFile));
+        $mailer = $this->get("mailer");
+        $mailer->send($messege);
+        $this->addFlash("success", "Photo sent to email!");
+        return $this->redirectToRoute("myshop_admin_productphoto_list", [
+            "productId" => $productId
+        ]);
+    }
+
+    /**
+     *  @Route("/photos/product/{productId}/", requirements={"productId": "\d+"})
+     * @Method({"GET", "POST"})
+     * @param $productId
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function listAction($productId)
+    {
+        $product = $this->getRepository("MyShopDefaultBundle:Product")->find($productId);
         return $this->render("MyShopAdminBundle:ProductPhoto:list.html.twig", [
                 "product" => $product
         ]);
     }
 
     /**
-     * @Route("/photo/add/product/{id_product}/", requirements={"id_product","\d+"})
+     * @Route("/photo/add/product/{productId}/", requirements={"productId","\d+"})
      * @Method({"GET", "POST"})
      * @param Request $request
-     * @param $id_product
+     * @param $productId
+     * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function addPhotoAction(Request $request, $id_product)
+    public function addPhotoAction(Request $request, $productId)
     {
-        $product = $this->getRepository("MyShopDefaultBundle:Product")->find($id_product);
+        $product = $this->getRepository("MyShopDefaultBundle:Product")->find($productId);
         if ($product == null) {
             return $this->createNotFoundException("Product not found!");
         }
@@ -50,9 +105,11 @@ class ProductPhotoController extends BaseController
             try {
                 $checkImgService->check($photoFile);
             } catch (\InvalidArgumentException $ex) {
-                die("Image type error!");
+                $this->addFlash("error", "Image type error!");
+                return $this->redirectToRoute("myshop_admin_productphoto_addphoto", ['productId' => $productId]);
             }
-            $result = $this->get("myshop_admin.upload_image_service")->uploadImage($photoFile, $id_product);
+            $result = $this->get("myshop_admin.upload_image_service")
+                ->uploadImage($photoFile, $productId);
             $photo->setFileName($result->getOriginalFile());
             $photo->setMobileFileName($result->getMobileFileName());
             $photo->setMainFileName($result->getMainFileName());
@@ -62,7 +119,7 @@ class ProductPhotoController extends BaseController
             $manager = $this->getManager();
             $manager->persist($photo);
             $manager->flush();
-            return $this->redirectToRoute("myshop_admin_productphoto_list", ['id_product' => $id_product]);
+            return $this->redirectToRoute("myshop_admin_productphoto_list", ['productId' => $productId]);
         }
         return $this->render("MyShopAdminBundle:ProductPhoto:add.html.twig", [
                 "form" => $form->createView(),
@@ -71,47 +128,52 @@ class ProductPhotoController extends BaseController
     }
 
     /**
-     * @Route("/product/{id_product}/photo/delete/{id_photo}", requirements={"id_product": "\d+", "id_photo": "\d+"})
-     * @param $id_photo
-     *
+     * @Route("/product/{productId}/photo/delete/{photoId}", requirements={"productId": "\d+", "photoId": "\d+"})
+     * @param $productId
+     * @param $photoId
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
-    public function deletePhotoAction($id_product, $id_photo)
+    public function deletePhotoAction($productId, $photoId)
     {
         $productPhoto = $this
             ->getRepository("MyShopDefaultBundle:ProductPhoto")
-            ->find($id_photo);
+            ->find($photoId);
         $removeFiles = $this->get("myshop_admin.remove_files");
-        $removeFiles->setPhotoArray($productPhoto->getUnlinkNames());
-        $removeFiles->removeFiles();
+//        $removeFiles->setPhotoArray();
+        $removeFiles->removeFiles($productPhoto->getUnlinkNames());
         $manager = $this->getManager();
         $manager->remove($productPhoto);
         $manager->flush();
-        return $this->redirectToRoute("myshop_admin_productphoto_list", ['id_product' => $id_product]);
+        return $this->redirectToRoute("myshop_admin_productphoto_list", [
+            'productId' => $productId
+        ]);
     }
 
     /**
-     * @Route("/product/{id_product}/photo/edit/{id_photo}/", requirements={"id_product": "\d+", "id_photo": "\d+"})
-     *
+     * @Route("/product/{productId}/photo/edit/{photoId}/", requirements={"productId": "\d+", "photoId": "\d+"})
+     * @param $productId
+     * @param $photoId
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
-    public function editPhotoAction(Request $request, $id_product, $id_photo)
+    public function editPhotoAction(Request $request, $productId, $photoId)
     {
 
-        $product = $this->getRepository("MyShopDefaultBundle:Product")->find($id_product);
+        $product = $this->getRepository("MyShopDefaultBundle:Product")->find($productId);
+
         if ($product == null) {
-            return $this->createNotFoundException("Product not found!");
+            $this->addFlash("error", "Product not found!");
+            return $this->redirectToRoute("myshop_admin_product_list");
         }
 
-        $photo = $this
-            ->getRepository("MyShopDefaultBundle:ProductPhoto")
-            ->find($id_photo);
+        $photo = $this->getRepository("MyShopDefaultBundle:ProductPhoto")->find($photoId);
         $form = $this->createForm(ProductPhotoType::class, $photo);
-        $photoArray = $photo->getUnlinkNames();;
-        if ($request->isMethod("POST"))
-        {
+
+        $photoArray = $photo->getUnlinkNames();
+
+        if ($request->isMethod("POST")) {
             $form->handleRequest($request);
 
-            if ($form->isSubmitted())
-            {
+            if ($form->isSubmitted()) {
                 $filesArr = $request->files->get("myshop_defaultbundle_productphoto");
                 /** @var UploadedFile $photoFile */
                 $photoFile = $filesArr["photoFile"];
@@ -121,9 +183,11 @@ class ProductPhotoController extends BaseController
                 try {
                     $checkImgService->check($photoFile);
                 } catch (\InvalidArgumentException $ex) {
-                    die("Image type error!");
+                    $this->addFlash("error", "Image type error!");
+                    return $this->redirectToRoute("myshop_admin_productphoto_editphoto", ["productId" => $productId, 'photoId' => $photoId]);
                 }
-                $result = $this->get("myshop_admin.upload_image_service")->uploadImage($photoFile, $id_product);
+
+                $result = $this->get("myshop_admin.upload_image_service")->uploadImage($photoFile, $productId);
                 $photo->setFileName($result->getOriginalFile());
                 $photo->setMobileFileName($result->getMobileFileName());
                 $photo->setMainFileName($result->getMainFileName());
@@ -134,9 +198,10 @@ class ProductPhotoController extends BaseController
                 $manager->persist($photo);
                 $manager->flush();
                 $removeFiles = $this->get("myshop_admin.remove_files");
-                $removeFiles->setPhotoArray($photoArray);
-                $removeFiles->removeFiles();
-                return $this->redirectToRoute("myshop_admin_productphoto_list", ['id_product' => $id_product]);
+                $removeFiles->removeFiles($photoArray);
+                return $this->redirectToRoute("myshop_admin_productphoto_list", [
+                    'productId' => $productId
+                ]);
             }
         }
 
@@ -147,7 +212,6 @@ class ProductPhotoController extends BaseController
         ]);
     }
 
-
     public function testfileAction(Request $request)
     {
         $dir = $this->get("kernel")->getRootDir() . "/../src/MyShop/DefaultBundle/DataFixtures/Files";
@@ -155,7 +219,7 @@ class ProductPhotoController extends BaseController
 
         $dirTo = $this->get("kernel")->getRootDir() . "/../web/photos/";
 
-        $manager = $this->getDoctrine()->getManager();
+        $manager = $this->getManager();
 
         foreach ($files as $file)
         {
@@ -185,7 +249,9 @@ class ProductPhotoController extends BaseController
 //        $appDir = $this->get("kernel")->getRootDir() . "/../web/";
 //        $myFile->move($appDir, $myFile->getClientOriginalName());
 
-        return [];
+        return $this->render("MyShopAdminBundle:ProductPhoto:list.html.twig", [
+
+        ]);
     }
 }
 

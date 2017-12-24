@@ -9,9 +9,34 @@ body {
 
 #app {
     margin: 0 auto;
-    padding: 50px;
+    padding: 25px 50px;
 }
 
 table tr > td {
     padding: 5px;
+}
+
+.flash_message {
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.flash_message.err {
+    color: #a94442;
+}
+
+.flash_message.suc {
+    color: #3da892;
+}
+
+.category {
+    color: #000000;
+    line-height: 24px;
+}
+
+.category:hover {
+    color: #000000;
+}
+.category_remove {
+    margin: 0 10px;
 }

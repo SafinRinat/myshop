@@ -1,21 +1,144 @@
 {% extends "@MyShopAdmin/layout.html.twig" %}
-
-{% block head_js %}
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/themes/default/style.min.css" />
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/jstree.min.js"></script>
+{% block javascripts %}
+<link rel="stylesheet" href="{{ asset("bundles/myshopadmin/styles/dist/jstree/style.min.css") }}" />
+<script src="{{ asset("bundles/myshopadmin/js/dist/jstree.min.js") }}"></script>
 <script>
     $(function () {
-        $('#jstree').jstree({'core':
-            {
-                'data' : {{ categoryListJson|raw }}
-            }
+        $('#jstree').jstree({
+            "core": {
+                "multiple" : false,
+                "data" : {{ categoryListJson|raw }},
+                "check_callback" : function (operation, node, parent, position, more) {
+                    //rename_node, create_node, delete_node, move_node, copy_node
+                    if (operation === "rename_node") {
+                        console.log(node);
+                    }
+                    if (operation === "copy_node" || operation === "move_node") {
+                        if (parent.id === "#") {
+                            return false; // prevent moving a child above or below the root
+                        }
+                    } else {
+                        return true; // allow everything else
+                    }
+                }// enable all modifications
+            },
+            "types" : {
+                "default" : {
+                    "icon" : "glyphicon glyphicon-folder-close"
+                },
+                "f-open" : {
+                    "icon" : "glyphicon glyphicon-folder-open"
+                },
+                "f-closed" : {
+                    "icon": "glyphicon glyphicon-folder-close"
+                }
+            },
+            "plugins" : [  "types", "unique" ]
+        }).on("ready.jstree", function (e, data) {
+//            var node = data.instance.get_node('1');
+//            console.log(node);
+//            $(data.instance._model.data).each(function () {
+//                for (prop in this) {
+//                    if (typeof this[prop].original !== "undefined" || prop !== "#") {
+//                        $('#category_' + prop).parent().append(this[prop].original.category_remove, this[prop].original.category_edit);
+////                        console.log("prop");
+////                        console.log(prop);
+////                        console.log("other:");
+////                        console.log(this[prop].original.category_remove);
+////                        link.push(this[prop].original.category_remove);
+//                    }
+//                }
+//                $("#jstree").jstree("refresh_node.jstree");
+//            })
+//            $.each($(this), function(key, val) {
+//                $.ajax({
+//                    method: "GET",
+//                    url: val.href,
+//                    dataType: "json",
+//                    data: function (data) {
+//                        console.log(data);
+//                    }
+//                });
+//            });
+        }).on("changed.jstree", function (e, data) {
+//            if (data.selected.length) {
+//                $(data.selected).each(function (idx) {
+//                    var node = data.instance.get_node(data.selected[idx]);
+//                    var sub = node.text.substring(node.text.indexOf('<a'), node.text.length);
+////                    console.log(sub);
+//                });
+//            }
+//            $.each(data.instance._model.data, function(key, val) {
+//                if (key.length < 4 || key == '#') {
+//                    $.jstree.reference("#jstree").set_type(val, "opened");
+//                } else  {
+//                    $.jstree.reference("#jstree").set_type(val, "default");
+//                }
+//            });
+//            console.log(e);
+//            console.log(data.instance.get_node(data.selected[0]));
+//            if (data.instance.get_node(data.selected[0]).state.opened === true
+//                && data.instance.get_node(data.selected[0]).type === "default") {
+//                data.instance.get_node(data.selected[0]).type = "opened";
+//            } else {
+//                data.instance.get_node(data.selected[0]).type = "default";
+//            }
+//            console.log(data.instance.get_node(data.selected[0]).type);
+//            if (data.instance.get_node(data.selected[0]).state.opened === true) {
+//                if ($("a.jstree-clicked > i.jstree-icon").hasClass("glyphicon-folder-close")) {
+//                    $(this).removeClass("glyphicon-folder-close").addClass("glyphicon-folder-open");
+//                } else {
+//                    $(this).removeClass("glyphicon glyphicon-folder-open").addClass("glyphicon-folder-close");
+//                }
+//                $(".jstree-clicked > i.jstree-icon").on("change", function () {
+//                    console.log($(this));
+//                    if ($(this).hasClass("glyphicon-folder-close")) {
+//                        $(this).removeClass("glyphicon-folder-close").addClass("glyphicon-folder-open");
+//                    } else {
+//                        $(this).removeClass("glyphicon glyphicon-folder-open").addClass("glyphicon-folder-close");
+//                    }
+//                });
+//                data.instance.get_node(data.selected[0]).icon = "glyphicon glyphicon-folder-open";
+//            }
+//            console.log(data.instance.get_node(data.selected[0]).icon);
+//            console.log(data.instance.get_selected(true)[0].text);
+//            console.log(data.instance.get_node(data.selected[0]).text);
+        }).on('open_node.jstree', function(e, data) {
+            data.instance.set_type(data.node,'f-open');
+        }).on('close_node.jstree', function(e, data) {
+            data.instance.set_type(data.node,'f-closed');
         });
+//        .on("open_node.jstree", function (e, data) {
+//            $.each(data.instance._model.data, function(key, val) {
+//                console.log($.jstree.reference("#jstree"));
+//                $.jstree.reference("#jstree").set_type(val, "opened");
+//                if (key.length < 4 || key == '#') {
+//                    $.jstree.reference("#jstree").set_type(val, "opened");
+//                } else  {
+//                    $.jstree.reference("#jstree").set_type(val, "default");
+//                }
+//            });
+//        });
     });
+    $(document).on('click', '.category', function(e) {
+        e.preventDefault();
+        $.each($(this), function(key, val) {
+            $.ajax({
+                method: "GET",
+                url: val.href,
+                dataType: "json",
+                data: function (data) {
+                    console.log(data);
+                }
+            });
+        });
+//        var clickId = anchorId.substring(anchorId.indexOf('_') + 1, anchorId.length);
+//        onMenuItemClick(clickId, e);
+    });
+
 </script>
 {% endblock %}
 
 {% block body %}
-    <div id="jstree">
-        <ul></ul>
-    </div>
+    <div id="jstree"></div>
 {% endblock %}

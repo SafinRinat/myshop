@@ -8,16 +8,11 @@ class BaseController extends Controller
 {
     protected function getManager()
     {
-        return $manager = $this
-            ->getDoctrine()
-            ->getManager();
+        return $this->getDoctrine()->getManager();
     }
 
     protected function getRepository($repositoryName)
     {
-        return $repository = $this
-            ->getDoctrine()
-            ->getManager()
-            ->getRepository($repositoryName);
+        return $this->getDoctrine()->getManager()->getRepository($repositoryName);
     }
 }

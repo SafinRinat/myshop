@@ -4,14 +4,15 @@ namespace MyShop\AdminBundle\Controller;
 
 use MyShop\AdminBundle\Entity\User;
 use MyShop\AdminBundle\Form\UserType;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use MyShop\AdminBundle\Controller\BaseController;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
 
-class UserController extends Controller
+class UserController extends BaseController
 {
     /**
-     * @Template()
+     * @Route("/user/add")
     */
     public function addAction(Request $request)
     {
@@ -27,15 +28,14 @@ class UserController extends Controller
             $password = $this->get("security.password_encoder")->encodePassword($user, $plainPassword);
             $user->setPassword($password);
 
-            $manager = $this->getDoctrine()->getManager();
+            $manager = $this->getManager();
             $manager->persist($user);
             $manager->flush();
-
-            return $this->redirectToRoute("my_shop_admin.index");
+            return $this->redirectToRoute("myshop_admin_default_index");
         }
 
-        return [
+        return $this->render("@MyShopAdmin/User/add.html.twig", [
             'form' => $form->createView()
-        ];
+        ]);
     }
 }

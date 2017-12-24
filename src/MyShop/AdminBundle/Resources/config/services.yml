@@ -1,4 +1,13 @@
 services:
+  myshop_admin.send_email:
+      class: MyShop\AdminBundle\Utils\SendMailService
+      arguments:
+              - "@templating"
+              - "@mailer"
+              - "%mailer_company_name%"
+              - "%mailer_user%"
+              - "%user_notifications_list%"
+
   myshop_admin.upload_image_service:
       class: MyShop\AdminBundle\ImageUtils\UploadImageService
       arguments:
@@ -21,7 +30,13 @@ services:
   myshop_admin.image_name_generator:
       class: MyShop\AdminBundle\ImageUtils\ImageNameGenerator
 
-  myshop_admin.cat_tree_twig_extension:
+  myshop_admin.jstree:
+      class: MyShop\AdminBundle\Utils\JSTreeCategoryService
+      arguments:
+              - "@doctrine"
+              - "MyShopDefaultBundle:Category"
+
+  myshop_admin.my_twig_extension:
       class: MyShop\AdminBundle\Twig\MyCustomExtension
       public: false
       tags:
